@@ -44,7 +44,6 @@ const getUserSolution = () => {
   console.log("userSolution", userSolution);
 };
 
-
 // - the description of the code challenge and the difficulty level (get this via the CodeWars API - https://dev.codewars.com/#code-challenges-api
 const fetchProblemDescriptionAndRank = async () => {
   const url = window.location.href;
@@ -85,4 +84,4 @@ setTimeout(() => {
 // <div class="alert-box working">
 //  <i class="icon-moon-circle-check is-green-text is-nudged-down"></i>
 //      Impressive! You may take your time to refactor/comment your solution. Submit when ready.<a class="close">×</a></div>
-// then user is redirected to the kata's solutions page
+// then user is redirected to the kata's solutions page --> e.g. (https://www.codewars.com/kata/574a7d0dca4a8a0fbe000100/solutions/javascript)

@@ -1,3 +1,17 @@
 body {
-  font-size: 42px;
+  font-size: 12px;
+  padding: 10px;
+}
+
+img {
+  width: 10px;
+  height: 10px;
+  padding-right: 5px;
+}
+
+#authenticate-btn {
+  padding: 5px;
+  background-color: black;
+  border-radius: 5px;
+  color: white;
 }
