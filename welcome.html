@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeHub</title>
+    <link rel="stylesheet" href="./css/welcome.css" />
+  </head>
+  <body>
+    <h1>CodeHub</h1>
+    <p>Automatically sync your code from Codewars to GitHub</p>
+    <!--  if they've NEVER authenticated before, display the <div id="authenticate-request"> section.
+      If they are already authenticated, dont display the <div id="authenticate-request"> section. Show "To get started with CodeHub, Pick an Option: ..." Also, give the user the option to unlink the repo  -->
+    <div>
+      <label for="repo-options">Select an option:</label>
+      <select name="repo-options" id="repo-options">
+        <option value="new-repo">Create a new repository</option>
+        <option value="existing-repo">Select an existing repository</option>
+      </select>
+      <input placeholder="Repository name" type="input" id="repo-name" />
+      <button>Get Started</button>
+    </div>
+  </body>
+</html>

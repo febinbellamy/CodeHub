@@ -1,3 +1,16 @@
 body {
   font-size: 42px;
 }
+
+#repo-options,
+#repo-name {
+  font-size: 25px;
+  padding: 10px;
+}
+
+button {
+  font-size: 25px;
+  padding: 10px;
+  background-color: lightgreen;
+  font-weight: bold;
+}

@@ -2,7 +2,7 @@
   "name": "CodeHub",
   "description": "Automatically pushes your Codewars submissions to GitHub",
   "homepage_url": "https://github.com/FebinBellamy/CodeHub",
-  "version": "1.0",
+  "version": "0.0.1",
   "author": "Febin Bellamy",
   "action": {
     "default_icon": {
@@ -13,9 +13,17 @@
     "default_title": "CodeHub",
     "default_popup": "popup.html"
   },
+  "icons": {
+    "16": "assets/icon.png",
+    "48": "assets/icon.png",
+    "128": "assets/icon.png"
+  },
   "content_scripts": [
     {
-      "matches": ["https://www.codewars.com/*", "https://github.com/*"],
+      "matches": [
+        "https://www.codewars.com/kata/*/train/*",
+        "https://github.com/*"
+      ],
       "js": ["scripts/codewars.js", "scripts/authorize.js"],
       "run_at": "document_idle"
     }
@@ -24,7 +32,7 @@
     "service_worker": "scripts/background.js",
     "persistent": false
   },
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "tabs", "scripting", "webNavigation", "activeTab"],
   "host_permissions": [
     "https://www.codewars.com/*",
     "https://github.com/*",

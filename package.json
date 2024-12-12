@@ -1,0 +1,22 @@
+{
+  "name": "codehub",
+  "version": "0.0.1",
+  "description": "A Chrome extension that automatically pushes your Codewars submissions to GitHub",
+  "main": "popup.js",
+  "dependencies": {
+    "octokit": "^4.0.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/febinbellamy/CodeHub.git"
+  },
+  "author": "Febin Bellamy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/febinbellamy/CodeHub/issues"
+  },
+  "homepage": "https://github.com/febinbellamy/CodeHub#readme"
+}
