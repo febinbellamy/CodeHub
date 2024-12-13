@@ -9,16 +9,29 @@
   <body>
     <h1>CodeHub</h1>
     <p>Automatically sync your code from Codewars to GitHub</p>
-    <!--  if they've NEVER authenticated before, display the <div id="authenticate-request"> section.
-      If they are already authenticated, dont display the <div id="authenticate-request"> section. Show "To get started with CodeHub, Pick an Option: ..." Also, give the user the option to unlink the repo  -->
-    <div>
+    <div id="authenticate-request">
+      <p>Authenticate with GitHub</p>
+      <button id="authenticate-btn">
+        <img src="assets/githubLogo.png" />Authenticate
+      </button>
+    </div>
+    <div id="link-repo-request">
       <label for="repo-options">Select an option:</label>
       <select name="repo-options" id="repo-options">
         <option value="new-repo">Create a new repository</option>
         <option value="existing-repo">Select an existing repository</option>
       </select>
       <input placeholder="Repository name" type="input" id="repo-name" />
-      <button>Get Started</button>
+      <button id="get-started-btn">Get Started</button>
     </div>
+    <div id="repo-connected">
+      <a href="#" id="repo">febinbellamy/testing-codehub</a>
+      <hr />
+      <p>
+        You're all set! Solve additional problems
+        <a href="https://www.codewars.com">here</a>.
+      </p>
+    </div>
+    <script src="scripts/welcome.js"></script>
   </body>
 </html>

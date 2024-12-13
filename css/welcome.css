@@ -14,3 +14,16 @@ button {
   background-color: lightgreen;
   font-weight: bold;
 }
+
+img {
+  width: 25px;
+  height: 25px;
+  padding-right: 5px;
+}
+
+#authenticate-btn {
+  padding: 5px;
+  background-color: black;
+  border-radius: 5px;
+  color: white;
+}

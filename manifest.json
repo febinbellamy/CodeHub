@@ -20,11 +20,8 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://www.codewars.com/kata/*/train/*",
-        "https://github.com/*"
-      ],
-      "js": ["scripts/codewars.js", "scripts/authorize.js"],
+      "matches": ["https://www.codewars.com/kata/*/train/*"],
+      "js": ["scripts/codewars.js"],
       "run_at": "document_idle"
     }
   ],

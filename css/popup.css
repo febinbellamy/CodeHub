@@ -9,7 +9,8 @@ img {
   padding-right: 5px;
 }
 
-#authenticate-btn {
+#authenticate-btn,
+#link-repo-btn {
   padding: 5px;
   background-color: black;
   border-radius: 5px;

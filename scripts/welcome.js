@@ -1,6 +1,8 @@
+console.log("hello from welcome.js!");
+
 const authButton = document.querySelector("#authenticate-btn");
 const authRequestSection = document.querySelector("#authenticate-request");
-const linkRepoButton = document.querySelector("#link-repo-btn");
+const getStartedButton = document.querySelector("#get-started-btn");
 const linkRepoRequestSection = document.querySelector("#link-repo-request");
 const repoConnectedSection = document.querySelector("#repo-connected");
 
@@ -10,10 +12,16 @@ authButton.addEventListener("click", () => {
   chrome.runtime.sendMessage({ action: "authenticateUser" });
 });
 
-linkRepoButton.addEventListener("click", () => {
-  console.log("Link repo button clicked!");
-  console.log("Opening up welcome.html in a new tab");
-  window.open("welcome.html", "_blank").focus();
+getStartedButton.addEventListener("click", () => {
+  console.log("getStartedButton clicked!");
+  console.log(
+    "attempting to link an existing repo OR create a new repo"
+  );
+});
+
+chrome.storage.local.set({
+  isUserAuthenticated: false,
+  isRepoConnected: false,
 });
 
 chrome.storage.local.get(

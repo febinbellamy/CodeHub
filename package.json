@@ -3,9 +3,7 @@
   "version": "0.0.1",
   "description": "A Chrome extension that automatically pushes your Codewars submissions to GitHub",
   "main": "popup.js",
-  "dependencies": {
-    "octokit": "^4.0.2"
-  },
+  "dependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
