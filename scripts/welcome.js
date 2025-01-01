@@ -5,29 +5,44 @@ const authRequestSection = document.querySelector("#authenticate-request");
 const getStartedButton = document.querySelector("#get-started-btn");
 const linkRepoRequestSection = document.querySelector("#link-repo-request");
 const repoConnectedSection = document.querySelector("#repo-connected");
+const aTagForRepoUrl = document.querySelector("#repo-url");
+
+// chrome.storage.local.set(
+//   { isUserAuthenticated: false, isRepoConnected: false },
+//   () => {
+//     console.log("Setting isUserAuthenticated to false");
+//   }
+// );
+
+// chrome.storage.local.set(
+//   { isUserAuthenticated: true, isRepoConnected: false },
+//   () => {
+//     console.log("Setting isRepoConnected to false");
+//   }
+// );
 
 authButton.addEventListener("click", () => {
-  console.log("Authenticate button clicked!");
-  // Send message to background.js to kickstart the authentication process
   chrome.runtime.sendMessage({ action: "authenticateUser" });
 });
 
 getStartedButton.addEventListener("click", () => {
-  console.log("getStartedButton clicked!");
-  console.log(
-    "attempting to link an existing repo OR create a new repo"
-  );
-});
-
-chrome.storage.local.set({
-  isUserAuthenticated: false,
-  isRepoConnected: false,
+  const selectedOption = document.querySelector("#repo-options").value;
+  const repoName = document.querySelector("#repo-name").value;
+  if (selectedOption === "existing-repo") {
+    chrome.runtime.sendMessage({
+      action: "connectExistingRepo",
+      repoName: repoName,
+    });
+  } else if (selectedOption === "new-repo") {
+    chrome.runtime.sendMessage({ action: "createRepo", repoName: repoName });
+  }
 });
 
 chrome.storage.local.get(
-  ["isUserAuthenticated", "isRepoConnected"],
+  ["isUserAuthenticated", "isRepoConnected", "githubUsername", "repo"],
   (result) => {
-    const { isUserAuthenticated, isRepoConnected } = result;
+    const { isUserAuthenticated, isRepoConnected, githubUsername, repo } =
+      result;
 
     if (!isUserAuthenticated && !isRepoConnected) {
       repoConnectedSection.style.display = "none";
@@ -41,6 +56,8 @@ chrome.storage.local.get(
       authRequestSection.style.display = "none";
       linkRepoRequestSection.style.display = "none";
       repoConnectedSection.style.display = "block";
+      aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}`;
+      aTagForRepoUrl.href = `https://github.com/${githubUsername}/${repo}`;
     }
   }
 );

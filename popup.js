@@ -6,7 +6,6 @@ const repoConnectedSection = document.querySelector("#repo-connected");
 
 authButton.addEventListener("click", () => {
   console.log("Authenticate button clicked!");
-  // Send message to background.js to kickstart the authentication process
   chrome.runtime.sendMessage({ action: "authenticateUser" });
 });
 

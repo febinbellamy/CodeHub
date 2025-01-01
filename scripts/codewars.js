@@ -1,65 +1,83 @@
-console.log("codewars script injected!");
-setTimeout(() => {
-  const data = {};
-  const submitButton = document.querySelector("#submit_btn");
+chrome.storage.local.get(["isRepoConnected"], (result) => {
+  const { isRepoConnected } = result;
+  if (isRepoConnected) {
+    console.log("codewars script injected!");
+    setTimeout(() => {
+      const data = {};
+      const submitButton = document.querySelector("#submit_btn");
 
-  // The description of the problem and the difficulty level (via the CodeWars API - https://dev.codewars.com/#code-challenges-api
-  const getDescriptionAndRank = async () => {
-    const url = window.location.href;
-    const startingIndexOfId = 30;
-    const endingIndexOfId = url.indexOf("/train/");
-    const problemId = url.slice(startingIndexOfId, endingIndexOfId);
-    try {
-      const res = await fetch(
-        `https://www.codewars.com/api/v1/code-challenges/${problemId}`
-      );
-      const json = await res.json();
-      data["description"] = json["description"];
-      data["rank"] = json["rank"]["name"]; // 6-kyu, 5-kyu, etc.
-      data["fileAndDirectoryName"] = json["slug"];
-      data["name"] = json["name"];
-    } catch (e) {
-      console.log("Error! Unable to get description and rank: ", e);
-    }
-  };
-
-  const getUserSolution = () => {
-    const userCodeBeforeParsing =
-      document.querySelectorAll(".CodeMirror-lines")[0].innerText;
-    const userCodeArr = userCodeBeforeParsing.split("\n");
-    let result = "";
-
-    for (let i = 0; i < userCodeArr.length; i++) {
-      let elem = userCodeArr[i];
-      if (/[^0-9]/.test(elem)) {
-        result += elem;
-        if (i !== userCodeArr.length - 1) {
-          result += "\n";
+      const getDescriptionAndRank = async () => {
+        const url = window.location.href;
+        const startingIndexOfId = 30;
+        const endingIndexOfId = url.indexOf("/train/");
+        const problemId = url.slice(startingIndexOfId, endingIndexOfId);
+        try {
+          const response = await fetch(
+            `https://www.codewars.com/api/v1/code-challenges/${problemId}`
+          );
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
+          const json = await response.json();
+          const nameOfChallenge = json["name"];
+          const rank = json["rank"]["name"];
+          const descriptionHeader = `<h2><a href=${url} target="_blank">${nameOfChallenge}</a></h2><h3>${rank}</h3>`;
+          const descriptionBeforeParsing =
+            document.querySelector("#description").innerHTML;
+          const parsedDescription = descriptionBeforeParsing
+            .trim()
+            .replaceAll("\n", "<br/>");
+          data["rank"] = rank;
+          data["name"] = nameOfChallenge;
+          data["description"] = descriptionHeader + parsedDescription;
+          data["directoryName"] = json["slug"];
+        } catch (e) {
+          console.log("Error! Unable to get description and rank: ", e);
         }
-      }
-    }
-    data["userSolution"] = result;
-  };
+      };
 
-  const interceptRedirection = () => {
-    const originalPushState = history.pushState;
-    history.pushState = function () {
-      setTimeout(() => {
-        originalPushState.apply(history, arguments);
-      }, 2000);
-    };
-  };
+      const getUserSolution = () => {
+        const userCodeBeforeParsing =
+          document.querySelectorAll(".CodeMirror-lines")[0].innerText;
+        const userCodeArr = userCodeBeforeParsing.split("\n");
+        let parsedUserSolution = "";
 
-  const getData = async () => {
-    interceptRedirection();
-    await getDescriptionAndRank();
-    data["languageOfUserSolution"] = document
-      .querySelector(".mr-4")
-      .innerText.trimLeft();
-    getUserSolution();
+        for (let i = 0; i < userCodeArr.length; i++) {
+          let elem = userCodeArr[i];
+          if (/[^0-9]/.test(elem)) {
+            parsedUserSolution += elem;
+            if (i !== userCodeArr.length - 1) {
+              parsedUserSolution += "\n";
+            }
+          }
+        }
+        data["userSolution"] = parsedUserSolution;
+      };
 
-    chrome.runtime.sendMessage({ codewarsData: data });
-  };
+      const interceptRedirection = () => {
+        const originalPushState = history.pushState;
+        history.pushState = function () {
+          setTimeout(() => {
+            originalPushState.apply(history, arguments);
+          }, 2000);
+        };
+      };
 
-  submitButton.addEventListener("click", getData);
-}, 3000);
+      const getData = async () => {
+        interceptRedirection();
+        await getDescriptionAndRank();
+        data["languageOfUserSolution"] = document
+          .querySelector(".mr-4")
+          .innerText.trimLeft()
+          .toLowerCase();
+        getUserSolution();
+        chrome.runtime.sendMessage({
+          codewarsData: data,
+          action: "pushToGithub",
+        });
+      };
+
+      submitButton.addEventListener("click", getData);
+    }, 3000);
+  }
+});
