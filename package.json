@@ -2,7 +2,7 @@
   "name": "codehub",
   "version": "0.0.1",
   "description": "A Chrome extension that automatically pushes your Codewars submissions to GitHub",
-  "main": "4.js",
+  "main": "popup.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack serve",

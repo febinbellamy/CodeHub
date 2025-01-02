@@ -14,6 +14,18 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
   }
 });
 
+chrome.webNavigation.onHistoryStateUpdated.addListener(({ url, tabId }) => {
+  if (
+    url.includes("https://www.codewars.com/kata/") &&
+    url.includes("/train/")
+  ) {
+    chrome.scripting.executeScript({
+      target: { tabId },
+      files: ["scripts/codewars.js"],
+    });
+  }
+});
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "authenticateUser") {
     const accessTokenUrl = "https://github.com/login/oauth/access_token";
