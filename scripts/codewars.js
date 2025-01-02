@@ -20,7 +20,7 @@ chrome.storage.local.get(["isRepoConnected"], (result) => {
           }
           const json = await response.json();
           const nameOfChallenge = json["name"];
-          const rank = json["rank"]["name"];
+          const rank = `${json["rank"]["name"][0]}-kyu`;
           const descriptionHeader = `<h2><a href=${url} target="_blank">${nameOfChallenge}</a></h2><h3>${rank}</h3>`;
           const descriptionBeforeParsing =
             document.querySelector("#description").innerHTML;

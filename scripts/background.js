@@ -1,5 +1,7 @@
 console.log("scripts/background.js");
 
+import { clientId, clientSecret } from "../credentials.js";
+
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
     chrome.tabs.create({
@@ -16,13 +18,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "authenticateUser") {
     const accessTokenUrl = "https://github.com/login/oauth/access_token";
     const authorizeUrl = "https://github.com/login/oauth/authorize";
-    const clientId = process.env.CLIENT_ID;
-    const clientSecret = process.env.CLIENT_SECRET;
     const redirectUrl = "https://github.com/";
     const scopes = "repo";
     const authUrl = `${authorizeUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scopes}`;
-    console.log("authUrl", authUrl);
-
     const getGitHubAccessToken = async (githubCode) => {
       const url = `${accessTokenUrl}?client_id=${clientId}&client_secret=${clientSecret}&code=${githubCode}`;
       const options = {
@@ -270,6 +268,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 });
 
 // TODO: Implement "unlink a repo" functionality
+// // In Chrome storage local, just set repo to "", notify the user that the repo has been unlinked, and return to original state (create or link to exisiting repo state)
 // chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 //   if (request.action === "unlinkRepo") {
 //   }
@@ -281,8 +280,13 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     console.log(request.codewarsData);
     const { githubUsername, repo, accessToken } =
       await chrome.storage.local.get(["githubUsername", "repo", "accessToken"]);
-    const { directoryName, languageOfUserSolution, userSolution, description } =
-      request.codewarsData;
+    const {
+      directoryName,
+      languageOfUserSolution,
+      userSolution,
+      description,
+      rank,
+    } = request.codewarsData;
     const supportedFileExtensions = {
       agda: ".agda",
       bf: ".bf",
@@ -349,7 +353,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const encodedReadMe = btoa(unescape(encodeURIComponent(description)));
 
     const addSolution = async () => {
-      const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${directoryName}/${fileName}`;
+      const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${rank}/${directoryName}/${fileName}`;
       const data = {
         message: "Add solution - CodeHub",
         content: encodedSolution,
@@ -380,7 +384,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     };
 
     const addReadme = async () => {
-      const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${directoryName}/README.md`;
+      const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${rank}/${directoryName}/README.md`;
       const data = {
         message: "Add README.md - CodeHub",
         content: encodedReadMe,

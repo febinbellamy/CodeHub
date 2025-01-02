@@ -2,7 +2,7 @@
   "name": "codehub",
   "version": "0.0.1",
   "description": "A Chrome extension that automatically pushes your Codewars submissions to GitHub",
-  "main": "popup.js",
+  "main": "4.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack serve",
@@ -18,12 +18,5 @@
   "bugs": {
     "url": "https://github.com/febinbellamy/CodeHub/issues"
   },
-  "homepage": "https://github.com/febinbellamy/CodeHub#readme",
-  "devDependencies": {
-    "dotenv": "^16.4.7"
-  },
-  "dependencies": {
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2"
-  }
+  "homepage": "https://github.com/febinbellamy/CodeHub#readme"
 }
