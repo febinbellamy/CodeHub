@@ -76,6 +76,17 @@ chrome.storage.local.get(["isRepoConnected"], (result) => {
       };
 
       submitButton.addEventListener("click", getData);
+      document.addEventListener("keydown", (event) => {
+        const isCmdOrCtrlKeyPressed = event.ctrlKey || event.metaKey;
+        const isEnterKeyPressed = event.key === "Enter";
+        if (
+          isCmdOrCtrlKeyPressed &&
+          isEnterKeyPressed &&
+          !submitButton.classList.contains("is-hidden")
+        ) {
+          submitButton.click();
+        }
+      });
     }, 3000);
   }
 });
