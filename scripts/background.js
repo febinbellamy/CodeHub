@@ -99,8 +99,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         chrome.storage.local.set({ isUserAuthenticated: true }, () => {
           console.log("Setting isUserAuthenticated to true");
         });
-
-        // Open up welcome.html in a new tab AFTER the user authenticates github account
         chrome.tabs.create({ url: "welcome.html", active: true });
 
         // Display "Create a new repo or link current repo" section

@@ -20,16 +20,14 @@ chrome.storage.local.get(["isRepoConnected"], (result) => {
           }
           const json = await response.json();
           const nameOfChallenge = json["name"];
-          const rank = `${json["rank"]["name"][0]}-kyu`;
-          const descriptionHeader = `<h2><a href=${url} target="_blank">${nameOfChallenge}</a></h2><h3>${rank}</h3>`;
+          const rank = json["rank"]["name"][0];
+          const descriptionHeader = `<h2><a href=${url} target="_blank">${nameOfChallenge}</a></h2><h3>${rank} kyu</h3>`;
           const descriptionBeforeParsing =
             document.querySelector("#description").innerHTML;
-          const parsedDescription = descriptionBeforeParsing
-            .trim()
-            .replaceAll("\n", "<br/>");
-          data["rank"] = rank;
+          const parsedDescription = descriptionBeforeParsing.replace(/\n/g, "");
+          data["rank"] = `${rank}-kyu`;
           data["name"] = nameOfChallenge;
-          data["description"] = descriptionHeader + parsedDescription;
+          data["description"] = `${descriptionHeader}${parsedDescription}`;
           data["directoryName"] = json["slug"];
         } catch (e) {
           console.log("Error! Unable to get description and rank: ", e);
