@@ -1,33 +1,25 @@
-console.log("hello from welcome.js!");
-
 const authButton = document.querySelector("#authenticate-btn");
 const authRequestSection = document.querySelector("#authenticate-request");
 const getStartedButton = document.querySelector("#get-started-btn");
 const linkRepoRequestSection = document.querySelector("#link-repo-request");
 const repoConnectedSection = document.querySelector("#repo-connected");
 const aTagForRepoUrl = document.querySelector("#repo-url");
-
-// chrome.storage.local.set(
-//   { isUserAuthenticated: false, isRepoConnected: false },
-//   () => {
-//     console.log("Setting isUserAuthenticated to false");
-//   }
-// );
-
-// chrome.storage.local.set(
-//   { isUserAuthenticated: true, isRepoConnected: false },
-//   () => {
-//     console.log("Setting isRepoConnected to false");
-//   }
-// );
+const aTagforUnlinkRepo = document.querySelector("#unlink-repo");
 
 authButton.addEventListener("click", () => {
   chrome.runtime.sendMessage({ action: "authenticateUser" });
 });
 
+aTagforUnlinkRepo.addEventListener("click", () => {
+  chrome.runtime.sendMessage({ action: "unlinkRepo" });
+});
+
 getStartedButton.addEventListener("click", () => {
   const selectedOption = document.querySelector("#repo-options").value;
-  const repoName = document.querySelector("#repo-name").value;
+  const repoName = document
+    .querySelector("#repo-name")
+    .value.trim()
+    .replaceAll(" ", "-");
   if (selectedOption === "existing-repo") {
     chrome.runtime.sendMessage({
       action: "connectExistingRepo",
@@ -38,26 +30,62 @@ getStartedButton.addEventListener("click", () => {
   }
 });
 
-chrome.storage.local.get(
-  ["isUserAuthenticated", "isRepoConnected", "githubUsername", "repo"],
-  (result) => {
-    const { isUserAuthenticated, isRepoConnected, githubUsername, repo } =
-      result;
+const updateUI = () => {
+  chrome.storage.local.get(
+    ["isUserAuthenticated", "isRepoConnected", "githubUsername", "repo"],
+    (result) => {
+      const { isUserAuthenticated, isRepoConnected, githubUsername, repo } =
+        result;
 
-    if (!isUserAuthenticated && !isRepoConnected) {
-      repoConnectedSection.style.display = "none";
-      linkRepoRequestSection.style.display = "none";
-      authRequestSection.style.display = "block";
-    } else if (isUserAuthenticated && !isRepoConnected) {
-      authRequestSection.style.display = "none";
-      repoConnectedSection.style.display = "none";
-      linkRepoRequestSection.style.display = "block";
-    } else if (isUserAuthenticated && isRepoConnected) {
-      authRequestSection.style.display = "none";
-      linkRepoRequestSection.style.display = "none";
-      repoConnectedSection.style.display = "block";
-      aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}`;
-      aTagForRepoUrl.href = `https://github.com/${githubUsername}/${repo}`;
+      if (!isUserAuthenticated && !isRepoConnected) {
+        repoConnectedSection.style.display = "none";
+        linkRepoRequestSection.style.display = "none";
+        authRequestSection.style.display = "block";
+      } else if (isUserAuthenticated && !isRepoConnected) {
+        authRequestSection.style.display = "none";
+        repoConnectedSection.style.display = "none";
+        linkRepoRequestSection.style.display = "block";
+      } else if (isUserAuthenticated && isRepoConnected) {
+        authRequestSection.style.display = "none";
+        linkRepoRequestSection.style.display = "none";
+        repoConnectedSection.style.display = "block";
+        aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}`;
+        aTagForRepoUrl.href = `https://github.com/${githubUsername}/${repo}`;
+      }
     }
+  );
+};
+
+const displayErrorMessage = (msg) => {
+  let errorMessage;
+
+  const repoName = document.querySelector("#repo-name").value;
+  if (msg.issue === "repoNotFound") {
+    errorMessage = `Error: the ${repoName} repository was not found. Please enter a valid repository name.`;
+  } else if (msg.issue === "createAnAlreadyExisitingRepo") {
+    errorMessage = `Error: the ${repoName} repository already exists. Please choose the "Select an existing repository" option.`;
+  } else if (msg.issue === "repoNameIsTooLongOrTooShort") {
+    errorMessage = `Error: please enter a valid repository name that is between 1 and 100 characters long.`;
+  } else {
+    errorMessage = `Error: please enter a valid repository name.`;
   }
-);
+
+  if (linkRepoRequestSection.children[0].tagName === "P") {
+    linkRepoRequestSection.children[0].innerText = errorMessage;
+  } else {
+    const pTag = document.createElement("p");
+    pTag.innerText = errorMessage;
+    pTag.style.color = "red";
+    linkRepoRequestSection.prepend(pTag);
+  }
+};
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.action === "updateUI") {
+    updateUI();
+  } else if (message.action === "displayErrorMessage") {
+    displayErrorMessage(message);
+  }
+});
+
+updateUI();

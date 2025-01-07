@@ -1,5 +1,3 @@
-console.log("scripts/background.js");
-
 import { clientId, clientSecret } from "../credentials.js";
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
@@ -48,8 +46,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
         const json = await response.json();
         if (json["access_token"]) {
-          await chrome.storage.local.set({ accessToken: json["access_token"] });
-          console.log("Stored accessToken in Chrome.storage.local!");
+          chrome.storage.local.set({ accessToken: json["access_token"] });
         }
       } catch (error) {
         console.log("Error! Unable to get access token", error.message);
@@ -59,7 +56,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const getGithubUsername = async () => {
       chrome.storage.local.get(["accessToken"], async (result) => {
         const accessToken = result.accessToken;
-        console.log("accessToken (getGithubUsername)", accessToken);
         const url = `https://api.github.com/user`;
         const options = {
           method: "GET",
@@ -74,20 +70,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             throw new Error(`Response status: ${response.status}`);
           }
           const json = await response.json();
-          console.log("json for githubUsername request:", json);
           const username = json["login"];
-          chrome.storage.local.set({ githubUsername: username }, () => {
-            console.log(
-              `Setting githubUsername in chrome storage to ${username}`
-            );
-          });
+          chrome.storage.local.set({ githubUsername: username });
         } catch (e) {
           console.log("Error! Unable to get github username", e.message);
         }
       });
     };
 
-    // open up authURL in a new tab
     chrome.tabs.create({ url: authUrl, active: true });
 
     const onTabUpdate = async (tabId, changeInfo, tab) => {
@@ -96,13 +86,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const code = tab.url.split("=")[1];
         await getGitHubAccessToken(code);
         await getGithubUsername();
-        chrome.storage.local.set({ isUserAuthenticated: true }, () => {
-          console.log("Setting isUserAuthenticated to true");
-        });
+        chrome.storage.local.set({ isUserAuthenticated: true });
+        chrome.runtime.sendMessage({ action: "updateUI" });
         chrome.tabs.create({ url: "welcome.html", active: true });
-
-        // Display "Create a new repo or link current repo" section
-        // TODO: I may have to reload welcome.html
       }
     };
     chrome.tabs.onUpdated.addListener(onTabUpdate);
@@ -110,7 +96,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 const checkIfRepoExists = async (repoName) => {
-  console.log(`Checking if ${repoName} repo exists!`);
   const { accessToken } = await chrome.storage.local.get(["accessToken"]);
   const url = `https://api.github.com/user/repos`;
   const options = {
@@ -126,7 +111,6 @@ const checkIfRepoExists = async (repoName) => {
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log("json for checkIfRepoExists request", json);
 
     for (let i = 0; i < json.length; i++) {
       let currentRepoName = json[i]["name"];
@@ -139,7 +123,6 @@ const checkIfRepoExists = async (repoName) => {
 };
 
 const createNewRepo = async (repoName) => {
-  console.log("Creating new repo!");
   const { accessToken } = await chrome.storage.local.get(["accessToken"]);
   const url = `https://api.github.com/user/repos`;
   const repoDescription = `A collection of solutions to various Codewars problems! - Created using [CodeHub](https://github.com/FebinBellamy/CodeHub)`;
@@ -158,27 +141,23 @@ const createNewRepo = async (repoName) => {
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    const name = json["name"];
-    console.log("Name of repo:", name);
-    return name;
+    console.log("json in create new repo", json);
+    return json["name"];
   } catch (e) {
     console.log("Error creating a new repo:", e.message);
   }
 };
 
 const createReadmeInNewRepo = async (repoName) => {
-  console.log("Creating a ReadMe in the new repo!");
   const { accessToken, githubUsername } = await chrome.storage.local.get([
     "accessToken",
     "githubUsername",
   ]);
   const commitMessage = "Initial commit";
   const url = `https://api.github.com/repos/${githubUsername}/${repoName}/contents/README.md`;
-  console.log("createReadmeInNewRepo fetching for this url =>", url);
   const repoDescriptionEncoded = btoa(
     "A collection of solutions to various Codewars problems! - Created using [CodeHub](https://github.com/FebinBellamy/CodeHub)"
   );
-  console.log("repoDescriptionEncoded ->", repoDescriptionEncoded);
   const data = { message: commitMessage, content: repoDescriptionEncoded };
   const options = {
     method: "PUT",
@@ -194,100 +173,75 @@ const createReadmeInNewRepo = async (repoName) => {
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log("json for createReadmeInNewRepo request", json);
-    console.log("Created a ReadMe!");
+    console.log("json for createReadmeInNewRepo", json);
   } catch (e) {
     console.log("Error creating a ReadMe in the new repo:", e.message);
   }
 };
 
-// Link to an existing repo. Include error handling logic (if repo doesn't exist, if fetch request fails, etc.)
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "connectExistingRepo") {
     const { repoName } = request;
-    console.log(`Attempting to LINK EXISTING repo ${repoName}`);
-
     if (repoName.length > 0 && repoName.length <= 100) {
-      // get all repos and check if the repo name exists.
       const repoFound = await checkIfRepoExists(repoName);
-      console.log("repoFound", repoFound);
+      console.log("repoFound ->", repoFound);
       if (!repoFound) {
-        console.log(
-          `Error: the ${repoName} repository was not found. Please enter a valid repository name.`
-        );
+        chrome.runtime.sendMessage({
+          action: "displayErrorMessage",
+          issue: "repoNotFound",
+        });
       } else if (repoFound) {
-        // The repo was found! Link it.
-        // add await keyword here
-        chrome.storage.local.set(
-          { repo: repoName, isRepoConnected: true },
-          () => {
-            console.log(
-              `Setting repo key in storage to ${repoName} and isRepoConnected to true!`
-            );
-            // next, in welcome.js you should now display the repo link on the page along with an "unlink repository" button
-          }
-        );
+        chrome.storage.local.set({ repo: repoName, isRepoConnected: true });
+        chrome.runtime.sendMessage({ action: "updateUI" });
       }
     } else {
-      // in welcome.js you should display an error message on the page itself - Missing repo name!
-      console.log("Display error ON the page");
-      console.log("Error: please enter a valid repository name!");
+      chrome.runtime.sendMessage({
+        action: "displayErrorMessage",
+        issue: "repoNameIsTooLongOrTooShort",
+      });
     }
   }
 });
 
-// Create a new GitHub repo and link it. Include error handling logic (if repo doesn't exist, if fetch request fails, etc.)
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "createRepo") {
     const { repoName } = request;
-    console.log(`Attempting to CREATE new Repo named ${repoName}`);
 
     if (repoName.length > 0 && repoName.length <= 100) {
-      // check if the repo already exists.
       const repoFound = await checkIfRepoExists(repoName);
-      console.log("repoFound", repoFound);
-
       if (repoFound) {
-        // if the repo already exists, display an error message
-        // Error creating ${repoName}. Repository may have already been created. Click on the "Select an existing repository" option instead.
-        console.log(
-          `Error creating ${repoName} - this repository already exists! Click on the "Select an existing repository" option instead.`
-        );
+        chrome.runtime.sendMessage({
+          action: "displayErrorMessage",
+          issue: "createAnAlreadyExisitingRepo",
+        });
       } else if (!repoFound) {
-        // The repo doesn't already exist so create it!
         const finalRepoName = await createNewRepo(repoName);
-        console.log("finalRepoName: ", finalRepoName);
         await createReadmeInNewRepo(finalRepoName);
-
-        chrome.storage.local.set(
-          { repo: finalRepoName, isRepoConnected: true },
-          () => {
-            console.log(
-              `Setting repo key in storage to ${finalRepoName} and isRepoConnected to true!`
-            );
-            // next, in welcome.js you should now display the repo link on the page along with an "unlink repository" link
-          }
-        );
+        chrome.storage.local.set({
+          repo: finalRepoName,
+          isRepoConnected: true,
+        });
+        chrome.runtime.sendMessage({ action: "updateUI" });
       }
     } else {
-      // in welcome.js you should display an error message on the page itself. Missing repo name!
-      console.log("Display error ON the page");
-      console.log("Error: please enter a valid repository name.");
+      chrome.runtime.sendMessage({
+        action: "displayErrorMessage",
+        issue: "repoNameIsTooLongOrTooShort",
+      });
     }
   }
 });
 
-// TODO: Implement "unlink a repo" functionality
-// // In Chrome storage local, just set repo to "", notify the user that the repo has been unlinked, and return to original state (create or link to exisiting repo state)
-// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-//   if (request.action === "unlinkRepo") {
-//   }
-// });
+chrome.runtime.onMessage.addListener(async (request) => {
+  if (request.action === "unlinkRepo") {
+    await chrome.storage.local.remove(["repo"]);
+    chrome.storage.local.set({ isRepoConnected: false });
+    chrome.runtime.sendMessage({ action: "updateUI" });
+  }
+});
 
-// // Push solution received from codewars.js to the user's GitHub repo.
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "pushToGithub") {
-    console.log(request.codewarsData);
     const { githubUsername, repo, accessToken } =
       await chrome.storage.local.get(["githubUsername", "repo", "accessToken"]);
     const {
@@ -414,10 +368,9 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
           throw new Error(`Response status: ${response.status}`);
         }
         const json = await response.json();
-        console.log("json for pushing ReadMe to GitHub", json);
       } catch (error) {
         console.log(
-          "Error pushing ReadMe for codewars solution to GitHub!",
+          "Error pushing readme for codewars solution to GitHub!",
           error.message
         );
       }

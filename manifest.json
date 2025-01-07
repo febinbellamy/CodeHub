@@ -6,17 +6,17 @@
   "author": "Febin Bellamy",
   "action": {
     "default_icon": {
-      "16": "assets/icon.png",
-      "24": "assets/icon.png",
-      "32": "assets/icon.png"
+      "16": "assets/codehubLogo.png",
+      "24": "assets/codehubLogo.png",
+      "32": "assets/codehubLogo.png"
     },
     "default_title": "CodeHub",
     "default_popup": "popup.html"
   },
   "icons": {
-    "16": "assets/icon.png",
-    "48": "assets/icon.png",
-    "128": "assets/icon.png"
+    "16": "assets/codehubLogo.png",
+    "48": "assets/codehubLogo.png",
+    "128": "assets/codehubLogo.png"
   },
   "background": {
     "service_worker": "scripts/background.js",

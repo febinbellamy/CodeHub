@@ -3,6 +3,7 @@ const authRequestSection = document.querySelector("#authenticate-request");
 const linkRepoButton = document.querySelector("#link-repo-btn");
 const linkRepoRequestSection = document.querySelector("#link-repo-request");
 const repoConnectedSection = document.querySelector("#repo-connected");
+const aTagForRepoUrl = document.querySelector("#repo-url");
 
 authButton.addEventListener("click", () => {
   console.log("Authenticate button clicked!");
@@ -16,9 +17,10 @@ linkRepoButton.addEventListener("click", () => {
 });
 
 chrome.storage.local.get(
-  ["isUserAuthenticated", "isRepoConnected"],
+  ["isUserAuthenticated", "isRepoConnected", "githubUsername", "repo"],
   (result) => {
-    const { isUserAuthenticated, isRepoConnected } = result;
+    const { isUserAuthenticated, isRepoConnected, githubUsername, repo } =
+      result;
 
     if (!isUserAuthenticated && !isRepoConnected) {
       repoConnectedSection.style.display = "none";
@@ -32,6 +34,9 @@ chrome.storage.local.get(
       authRequestSection.style.display = "none";
       linkRepoRequestSection.style.display = "none";
       repoConnectedSection.style.display = "block";
+      aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}`;
+      aTagForRepoUrl.href = `https://github.com/${githubUsername}/${repo}`;
+      aTagForRepoUrl.target = "_blank";
     }
   }
 );
