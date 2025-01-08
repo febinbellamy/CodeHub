@@ -10,6 +10,9 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
       isRepoConnected: false,
     });
   }
+  chrome.runtime.setUninstallURL(
+    "https://docs.google.com/forms/d/e/1FAIpQLSec6gIK40FeNvv6fhjjVi42tU3yXD47y4fNlJlWVEmExhkf2g/viewform"
+  );
 });
 
 chrome.webNavigation.onHistoryStateUpdated.addListener(({ url, tabId }) => {
