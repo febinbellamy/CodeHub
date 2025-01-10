@@ -116,7 +116,7 @@ const checkIfRepoExists = async (repoName) => {
     const json = await response.json();
 
     for (let i = 0; i < json.length; i++) {
-      let currentRepoName = json[i]["name"];
+      let currentRepoName = json[i]["name"].toLowerCase();
       if (currentRepoName === repoName.toLowerCase()) return true;
     }
     return false;
