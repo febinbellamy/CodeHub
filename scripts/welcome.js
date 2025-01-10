@@ -5,6 +5,7 @@ const linkRepoRequestSection = document.querySelector("#link-repo-request");
 const repoConnectedSection = document.querySelector("#repo-connected");
 const aTagForRepoUrl = document.querySelector("#repo-url");
 const aTagforUnlinkRepo = document.querySelector("#unlink-repo");
+const starCodeHubButton = document.querySelector("#star-repo-button");
 
 authButton.addEventListener("click", () => {
   chrome.runtime.sendMessage({ action: "authenticateUser" });
@@ -12,6 +13,10 @@ authButton.addEventListener("click", () => {
 
 aTagforUnlinkRepo.addEventListener("click", () => {
   chrome.runtime.sendMessage({ action: "unlinkRepo" });
+});
+
+starCodeHubButton.addEventListener("click", () => {
+  window.open("http://www.github.com/febinbellamy/codehub", "_blank").focus();
 });
 
 getStartedButton.addEventListener("click", () => {

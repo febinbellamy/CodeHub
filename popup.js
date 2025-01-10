@@ -4,16 +4,18 @@ const linkRepoButton = document.querySelector("#link-repo-btn");
 const linkRepoRequestSection = document.querySelector("#link-repo-request");
 const repoConnectedSection = document.querySelector("#repo-connected");
 const aTagForRepoUrl = document.querySelector("#repo-url");
+const starCodeHubButton = document.querySelector("#star-repo-button");
 
 authButton.addEventListener("click", () => {
-  console.log("Authenticate button clicked!");
   chrome.runtime.sendMessage({ action: "authenticateUser" });
 });
 
 linkRepoButton.addEventListener("click", () => {
-  console.log("Link repo button clicked!");
-  console.log("Opening up welcome.html in a new tab");
   window.open("welcome.html", "_blank").focus();
+});
+
+starCodeHubButton.addEventListener("click", () => {
+  window.open("http://www.github.com/febinbellamy/codehub", "_blank").focus();
 });
 
 chrome.storage.local.get(

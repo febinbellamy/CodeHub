@@ -1,12 +1,18 @@
 body {
   font-size: 12px;
   padding: 10px;
+  text-align: center;
+  width: 205px;
 }
 
-img {
-  width: 10px;
-  height: 10px;
-  padding-right: 5px;
+h1 {
+  color: rgba(229, 44, 55, 255);
+  padding: 1px;
+}
+
+h2 {
+  font-size: 15px;
+  font-weight: normal;
 }
 
 #authenticate-btn,
@@ -15,4 +21,57 @@ img {
   background-color: black;
   border-radius: 5px;
   color: white;
+  cursor: pointer;
+}
+
+#authenticate-btn:hover,
+#link-repo-btn:hover {
+  transform: scale(1, 1, 1, 1);
+  opacity: 0.8;
+}
+
+#github-logo {
+  width: 10px;
+  height: 10px;
+  padding-right: 5px;
+}
+
+a {
+  color: rgb(76, 190, 228);
+}
+
+#star-repo-button {
+  padding: 5px;
+  background-color: #e7e7e7;
+  border: 1px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+#star-repo-button:hover {
+  background-color: rgba(229, 44, 55, 255);
+  color: white;
+}
+
+#footer-icons {
+  margin-top: 10px;
+}
+
+#footer-icons a {
+  text-decoration: none;
+  color: black;
+}
+
+#footer-icons a:hover {
+  color: rgba(229, 44, 55, 255);
+}
+
+footer {
+  margin-top: 8px;
+}
+
+hr {
+  margin-top: 5px;
+  margin-bottom: 10px;
 }

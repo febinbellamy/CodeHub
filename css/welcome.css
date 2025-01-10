@@ -1,29 +1,135 @@
 body {
-  font-size: 42px;
+  font-size: 35px;
+  background-color: #1c1d25;
+  color: white;
+  text-align: center;
 }
 
-#repo-options,
+hr {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+main {
+  padding-top: 50px;
+}
+
+#logo {
+  width: 250px;
+  height: 250px;
+}
+
 #repo-name {
   font-size: 25px;
-  padding: 10px;
+  padding: 7px;
 }
 
-button {
+#repo-options {
   font-size: 25px;
-  padding: 10px;
+  padding: 12px;
+}
+
+#get-started-btn {
+  font-size: 25px;
+  padding: 9px;
   background-color: lightgreen;
   font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-img {
+#get-started-btn:hover {
+  transform: scale(1, 1, 1, 1);
+  background-color: rgb(95, 244, 95);
+  opacity: 0.8;
+}
+
+label {
+  padding-right: 30px;
+}
+
+#github-logo {
   width: 25px;
   height: 25px;
-  padding-right: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
 }
 
 #authenticate-btn {
+  font-size: 25px;
   padding: 5px;
   background-color: black;
   border-radius: 5px;
   color: white;
+  cursor: pointer;
+}
+
+#authenticate-btn:hover {
+  transform: scale(1, 1, 1, 1);
+  opacity: 0.8;
+}
+
+a {
+  color: rgb(76, 190, 228);
+}
+
+#star-repo-button {
+  padding: 5px;
+  background-color: #e7e7e7;
+  border: 1px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+#star-repo-button:hover {
+  background-color: rgba(229, 44, 55, 255);
+  color: white;
+}
+
+footer {
+  margin-top: 80px;
+}
+
+#footer-icons a {
+  text-decoration: none;
+  color: white;
+}
+
+#footer-icons a:hover {
+  color: rgba(229, 44, 55, 255);
+}
+
+#unlink-repo {
+  font-size: 30px;
+}
+
+#link-repo-request {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 1rem;
+  margin: 1rem auto;
+  max-width: 95%;
+  box-sizing: border-box;
+  border: 1px solid white;
+  border-radius: 8px;
+  align-items: center;
+}
+
+#link-repo-request > * {
+  width: auto;
+  text-align: center;
+  margin: 5px;
+}
+
+@media (max-width: 1257px) {
+  #link-repo-request {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #link-repo-request > * {
+    width: 100%;
+  }
 }
