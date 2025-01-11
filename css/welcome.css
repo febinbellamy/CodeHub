@@ -6,8 +6,9 @@ body {
 }
 
 hr {
-  margin-top: 30px;
-  margin-bottom: 30px;
+  width: 50%;
+  margin: 30px auto;
+  padding-bottom: 5px;
 }
 
 main {
