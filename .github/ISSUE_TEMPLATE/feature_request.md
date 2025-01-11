@@ -1,9 +1,9 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: What new feature or improvement would make your CodeHub experience better?
 title: ''
-labels: ''
-assignees: ''
+labels: 'feature'
+assignees: 'febinbellamy'
 
 ---
 
