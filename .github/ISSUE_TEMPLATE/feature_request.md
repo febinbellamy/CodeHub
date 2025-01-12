@@ -2,7 +2,7 @@
 name: Feature request
 about: What new feature or improvement would make your CodeHub experience better?
 title: ''
-labels: 'feature'
+labels: 'enhancement'
 assignees: 'febinbellamy'
 
 ---
