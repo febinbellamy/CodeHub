@@ -144,7 +144,6 @@ const createNewRepo = async (repoName) => {
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log("json in create new repo", json);
     return json["name"];
   } catch (e) {
     console.log("Error creating a new repo:", e.message);
@@ -176,7 +175,6 @@ const createReadmeInNewRepo = async (repoName) => {
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log("json for createReadmeInNewRepo", json);
   } catch (e) {
     console.log("Error creating a ReadMe in the new repo:", e.message);
   }
@@ -340,8 +338,9 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         if (!response.ok) {
           throw new Error(`Response status: ${response.status}`);
         }
-        const json = await response.json();
-        console.log("json for pushing solution to GitHub", json);
+        console.log(
+          `Success! The solution has been pushed to the ${directoryName} directory.`
+        );
       } catch (error) {
         console.log(
           "Error pushing codewars solution to GitHub!",
@@ -370,10 +369,12 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         if (!response.ok) {
           throw new Error(`Response status: ${response.status}`);
         }
-        const json = await response.json();
+        console.log(
+          `Success! The README has been added to the ${directoryName} directory.`
+        );
       } catch (error) {
         console.log(
-          "Error pushing readme for codewars solution to GitHub!",
+          "Error pushing README for codewars solution to GitHub!",
           error.message
         );
       }

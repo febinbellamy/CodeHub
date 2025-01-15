@@ -1,12 +1,11 @@
 chrome.storage.local.get(["isRepoConnected"], (result) => {
   const { isRepoConnected } = result;
   if (isRepoConnected) {
-    console.log("codewars script injected!");
     setTimeout(() => {
       const data = {};
       const submitButton = document.querySelector("#submit_btn");
 
-      const getDescriptionAndRank = async () => {
+      const getChallengeInfo = async () => {
         const url = window.location.href;
         const startingIndexOfId = 30;
         const endingIndexOfId = url.indexOf("/train/");
@@ -63,7 +62,7 @@ chrome.storage.local.get(["isRepoConnected"], (result) => {
 
       const getData = async () => {
         interceptRedirection();
-        await getDescriptionAndRank();
+        await getChallengeInfo();
         data["languageOfUserSolution"] = document
           .querySelector(".mr-4")
           .innerText.trimLeft()
