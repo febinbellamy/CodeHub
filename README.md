@@ -80,3 +80,19 @@ CodeHub automates the process of committing and pushing your solutions to GitHub
 
 ## Code of Conduct
 In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation. More details can be found at this project's [code of conduct](https://github.com/febinbellamy/CodeHub/blob/main/.github/code_of_conduct.md).
+
+<br/>
+
+## Acknowledgements
+
+### LeetHub
+After manually pushing hundreds of my [Codewars solutions](https://github.com/febinbellamy/Codewars/commits) to GitHub, I searched for a tool to automate the process and came across [LeetHub](https://github.com/QasimWani/LeetHub) - an extension that does this for LeetCode solutions. While LeetHub wasn’t compatible with Codewars, its core functionality and UI served as an inspiration for the development of CodeHub.
+
+### Frances Coronel
+A big thank you to Frances Coronel for her [README template](https://gist.github.com/FrancesCoronel/1bfc2d4aecb01a834b46) - it was a great starting point for structuring the README for this project. 
+
+### Learning Resources
+The resources below helped me learn how to build a Chrome extension:
+* [freeCodeCamp | Build a Chrome Extension – Course for Beginners](https://www.youtube.com/watch?v=0n809nd4Zu4&t=3512s&ab_channel=freeCodeCamp.org)
+* [Gurulabs | Basics of Chrome Extension Playlist](https://www.youtube.com/playlist?list=PLBS1L3Ug2VVrTlexfI5i9OB0KpNfIjeeN)
+* [Tiff in Tech | CODE WITH ME: Build a Chrome Extension | How to Build & Publish a Chrome Extension in 10 Minutes](https://www.youtube.com/watch?v=B8Ihv3xsWYs&t=9s&ab_channel=TiffInTech) 
