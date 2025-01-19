@@ -13,5 +13,9 @@
   "bugs": {
     "url": "https://github.com/febinbellamy/CodeHub/issues"
   },
-  "homepage": "https://github.com/febinbellamy/CodeHub#readme"
+  "homepage": "https://github.com/febinbellamy/CodeHub#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3"
+  }
 }
