@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-size: 35px;
   background-color: #1c1d25;
@@ -22,7 +26,7 @@ main {
 
 #repo-name {
   font-size: 25px;
-  padding: 7px;
+  padding: 11px;
 }
 
 #repo-options {
@@ -32,7 +36,7 @@ main {
 
 #get-started-btn {
   font-size: 25px;
-  padding: 9px;
+  padding: 12px;
   background-color: lightgreen;
   font-weight: bold;
   border-radius: 5px;
@@ -53,7 +57,7 @@ label {
   width: 25px;
   height: 25px;
   margin-right: 5px;
-  margin-bottom: 5px;
+  margin-top: 2px;
 }
 
 #authenticate-btn {
@@ -81,6 +85,7 @@ a {
   border-radius: 5px;
   cursor: pointer;
   font-size: 20px;
+  margin-bottom: 10px;
 }
 
 #star-repo-button:hover {
@@ -111,7 +116,7 @@ footer {
   gap: 1rem;
   padding: 1rem;
   margin: 1rem auto;
-  max-width: 95%;
+  max-width: 100%;
   box-sizing: border-box;
   border: 1px solid white;
   border-radius: 8px;
@@ -124,7 +129,7 @@ footer {
   margin: 5px;
 }
 
-@media (max-width: 1257px) {
+@media (max-width: 1100px) {
   #link-repo-request {
     flex-direction: column;
     align-items: center;

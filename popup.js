@@ -11,11 +11,11 @@ authButton.addEventListener("click", () => {
 });
 
 linkRepoButton.addEventListener("click", () => {
-  window.open("welcome.html", "_blank").focus();
+  chrome.tabs.create({ url: "welcome.html" });
 });
 
 starCodeHubButton.addEventListener("click", () => {
-  window.open("http://www.github.com/febinbellamy/codehub", "_blank").focus();
+  chrome.tabs.create({ url: "http://www.github.com/febinbellamy/codehub" });
 });
 
 chrome.storage.local.get(
