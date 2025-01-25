@@ -61,6 +61,7 @@ a {
 #footer-icons a {
   text-decoration: none;
   color: black;
+  cursor: pointer;
 }
 
 #footer-icons a:hover {

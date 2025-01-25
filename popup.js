@@ -5,12 +5,17 @@ const linkRepoRequestSection = document.querySelector("#link-repo-request");
 const repoConnectedSection = document.querySelector("#repo-connected");
 const aTagForRepoUrl = document.querySelector("#repo-url");
 const starCodeHubButton = document.querySelector("#star-repo-button");
+const globeIcon = document.querySelector("#globe-icon");
 
 authButton.addEventListener("click", () => {
   chrome.runtime.sendMessage({ action: "authenticateUser" });
 });
 
 linkRepoButton.addEventListener("click", () => {
+  chrome.tabs.create({ url: "welcome.html" });
+});
+
+globeIcon.addEventListener("click", () => {
   chrome.tabs.create({ url: "welcome.html" });
 });
 
