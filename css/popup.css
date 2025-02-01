@@ -1,78 +1,148 @@
-body {
-  font-size: 12px;
-  padding: 10px;
-  text-align: center;
-  width: 205px;
-}
-
-h1 {
-  color: rgba(229, 44, 55, 255);
-  padding: 1px;
-}
-
-h2 {
-  font-size: 15px;
+@font-face {
+  font-family: 'Montserrat Alternates';
+  src: url('../assets-2/fonts/MontserratAlternates-Regular.woff2')
+    format('woff2');
   font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('../assets-2/fonts/Poppins-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('../assets-2/fonts/Poppins-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 205px;
+}
+
+.button {
+  font-family: 'Montserrat Alternates', sans-serif;
+  width: 100%;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  background-color: black;
+  color: white;
+  outline: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.title,
+.subtitle {
+  text-align: center;
+}
+
+.title {
+  font-size: 30px;
+  color: #e52b37;
+}
+
+.subtitle {
+  font-size: 16px;
+}
+
+hr {
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  border-radius: 2px;
+}
+
+#authenticate-request,
+#link-repo-request {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #authenticate-btn,
 #link-repo-btn {
-  padding: 5px;
-  background-color: black;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-}
-
-#authenticate-btn:hover,
-#link-repo-btn:hover {
-  transform: scale(1, 1, 1, 1);
-  opacity: 0.8;
+  justify-content: space-between;
 }
 
 #github-logo {
-  width: 10px;
-  height: 10px;
-  padding-right: 5px;
+  width: 16px;
+  aspect-ratio: 1;
+  transition: all 0.3s ease;
+}
+
+#authenticate-btn:hover,
+#link-repo-btn:hover,
+#star-repo-button:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  border-color: black;
+}
+
+#authenticate-btn:hover #github-logo,
+#link-repo-btn:hover #github-logo {
+  filter: brightness(0) saturate(100%) invert(6%) sepia(9%) saturate(463%)
+    hue-rotate(314deg) brightness(95%) contrast(90%);
+}
+
+#authenticate-btn:active,
+#link-repo-btn:active,
+.icon svg:active {
+  scale: 0.97;
+}
+
+.all-set {
+  text-align: center;
 }
 
 a {
-  color: rgb(76, 190, 228);
+  color: #4cbee4;
 }
 
 #star-repo-button {
-  padding: 5px;
-  background-color: #e7e7e7;
-  border: 1px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-#star-repo-button:hover {
-  background-color: rgba(229, 44, 55, 255);
-  color: white;
+  justify-content: center;
+  padding-inline: 4px;
+  font-size: 14px;
 }
 
 #footer-icons {
-  margin-top: 10px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 
-#footer-icons a {
-  text-decoration: none;
+.icon {
+  width: fit-content;
+  height: fit-content;
+}
+
+.icon svg {
   color: black;
-  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-#footer-icons a:hover {
-  color: rgba(229, 44, 55, 255);
-}
-
-footer {
-  margin-top: 8px;
-}
-
-hr {
-  margin-top: 5px;
-  margin-bottom: 10px;
+.icon svg:hover {
+  color: #4cbee4;
 }

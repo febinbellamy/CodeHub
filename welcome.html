@@ -7,86 +7,272 @@
     <link rel="stylesheet" href="./css/welcome.css" />
   </head>
   <body>
-    <main>
-      <img src="assets/codehubLogoTransparentWhite.png" id="logo" />
-      <p>Automatically sync your code from Codewars to GitHub</p>
-      <hr />
-      <div id="authenticate-request">
-        <p>Authenticate with GitHub</p>
-        <button id="authenticate-btn">
-          <img src="assets/githubLogo.png" id="github-logo" />Authenticate
-        </button>
+    <div class="loader-container">
+      <img
+        src="./assets-2/codehubLogoTransparentWhite.png"
+        alt="Логотип"
+        class="loader-image" />
+      <div class="loader-bar">
+        <div class="loader-progress"></div>
       </div>
-      <div id="link-repo-request">
-        <label for="repo-options">Choose an option:</label>
-        <select name="repo-options" id="repo-options">
-          <option value="new-repo">Create a new repository</option>
-          <option value="existing-repo">Select an existing repository</option>
-        </select>
-        <input placeholder="Repository name" type="input" id="repo-name" />
-        <button id="get-started-btn">Get Started</button>
+    </div>
+
+    <header class="header">
+      <a href="javascript:location.reload()">
+        <img
+          src="./assets-2/logo-header.png"
+          alt="CodeHub Logo"
+          class="header-logo" />
+      </a>
+
+      <div class="header-menu-and-button">
+        <nav class="header-menu">
+          <ul class="header-menu-list">
+            <li class="header-menu-item">
+              <a href="#intro-section" class="header-menu-link is-current"
+                >Intro</a
+              >
+            </li>
+            <li class="header-menu-item">
+              <a href="#usage-section" class="header-menu-link">How-to</a>
+            </li>
+            <li class="header-menu-item">
+              <a href="#contact-section" class="header-menu-link">Contacts</a>
+            </li>
+          </ul>
+        </nav>
+
+        <a
+          href="https://chromewebstore.google.com/detail/codehub/gadnnalppjchhdpplcjkhfabddchhlkp"
+          class="button header-button"
+          target="_blank"
+          >Install the Extension</a
+        >
       </div>
-      <div id="repo-connected">
-        <p>Successfully linked <a href="#" id="repo-url"></a> to CodeHub!</p>
-        <p><a href="" id="unlink-repo">Unlink repository</a></p>
+    </header>
+
+    <section class="intro-greeting" id="intro-section">
+      <h1 class="greeting-title">
+        Automatically Sync<br />Your Codewars Solutions to GitHub
+      </h1>
+      <p class="greeting-subtitle">
+        Save time and build your coding portfolio effortlessly.
+      </p>
+      <a href="#usage-section" class="button greeting-button"
+        >Let’s Get Started!</a
+      >
+
+      <div class="greeting-graphics">
+        <img src="./assets-2/graphics-codewars.svg" alt="Codewars logo" />
+        <div class="arrow-right"></div>
+        <img src="./assets-2/graphics-codehub.svg" alt="CodeHub logo" />
+        <div class="arrow-right"></div>
+        <img src="./assets-2/graphics-github.svg" alt="GitHub logo" />
       </div>
-      <footer>
-        <button id="star-repo-button">⭐️ Star CodeHub on GitHub</button>
-        <div id="footer-icons">
-          <a
-            href="https://github.com/febinbellamy/CodeHub/labels/bug"
-            target="_blank"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
-              fill="currentColor"
-              class="bi bi-bug"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M4.355.522a.5.5 0 0 1 .623.333l.291.956A5 5 0 0 1 8 1c1.007 0 1.946.298 2.731.811l.29-.956a.5.5 0 1 1 .957.29l-.41 1.352A5 5 0 0 1 13 6h.5a.5.5 0 0 0 .5-.5V5a.5.5 0 0 1 1 0v.5A1.5 1.5 0 0 1 13.5 7H13v1h1.5a.5.5 0 0 1 0 1H13v1h.5a1.5 1.5 0 0 1 1.5 1.5v.5a.5.5 0 1 1-1 0v-.5a.5.5 0 0 0-.5-.5H13a5 5 0 0 1-10 0h-.5a.5.5 0 0 0-.5.5v.5a.5.5 0 1 1-1 0v-.5A1.5 1.5 0 0 1 2.5 10H3V9H1.5a.5.5 0 0 1 0-1H3V7h-.5A1.5 1.5 0 0 1 1 5.5V5a.5.5 0 0 1 1 0v.5a.5.5 0 0 0 .5.5H3c0-1.364.547-2.601 1.432-3.503l-.41-1.352a.5.5 0 0 1 .333-.623M4 7v4a4 4 0 0 0 3.5 3.97V7zm4.5 0v7.97A4 4 0 0 0 12 11V7zM12 6a4 4 0 0 0-1.334-2.982A3.98 3.98 0 0 0 8 2a3.98 3.98 0 0 0-2.667 1.018A4 4 0 0 0 4 6z"
-              />
-            </svg>
-          </a>
-          <a
-            href="https://github.com/febinbellamy/CodeHub/labels/enhancement"
-            target="_blank"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
-              fill="currentColor"
-              class="bi bi-lightbulb"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1"
-              />
-            </svg>
-          </a>
-          <a
-            href="mailto:febinbellamy@gmail.com?subject=CodeHub"
-            target="_blank"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
-              fill="currentColor"
-              class="bi bi-envelope"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"
-              />
-            </svg>
-          </a>
+    </section>
+
+    <section class="intro-features">
+      <h2 class="features-title">Effortless Codewars Sync – Here’s How!</h2>
+      <div class="features-wrapper">
+        <div class="feature">
+          <p class="feature-text">
+            A browser extension that helps you save your Codewars progress by
+            syncing solutions to GitHub.
+          </p>
         </div>
-      </footer>
-    </main>
+        <div class="feature">
+          <p class="feature-text">
+            Automatically pushes your completed Codewars solutions to a
+            dedicated GitHub repository.
+          </p>
+        </div>
+        <div class="feature">
+          <p class="feature-text">
+            Eliminates the hassle of manual copy-pasting and file management.
+          </p>
+        </div>
+        <div class="feature">
+          <p class="feature-text">
+            Keeps your coding portfolio up to date effortlessly.
+          </p>
+        </div>
+        <div class="feature">
+          <p class="feature-text">
+            Works in the background – just code, and we’ll handle the rest.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="usage-info" id="usage-section">
+      <h2 class="usage-title">Getting Started with CodeHub</h2>
+      <div class="usage-wrapper">
+        <div class="usage-step">
+          <div class="usage-number-wrapper">
+            <p class="usage-number">1</p>
+          </div>
+          <p class="usage-step-title">Authenticate with GitHub</p>
+          <hr class="usage-divider" />
+          <p class="usage-step-description">
+            Log in with your GitHub account to allow automatic syncing
+          </p>
+        </div>
+
+        <div class="usage-step">
+          <div class="usage-number-wrapper">
+            <p class="usage-number">2</p>
+          </div>
+          <p class="usage-step-title">Connect your Codewars</p>
+          <hr class="usage-divider" />
+          <p class="usage-step-description">
+            Link your Codewars profile so the extension can access your
+            solutions
+          </p>
+        </div>
+
+        <div class="usage-step">
+          <div class="usage-number-wrapper">
+            <p class="usage-number">3</p>
+          </div>
+          <p class="usage-step-title">Choose a repository</p>
+          <hr class="usage-divider" />
+          <p class="usage-step-description">
+            Select or create a GitHub repository where your solutions will be
+            stored
+          </p>
+        </div>
+
+        <div class="usage-step">
+          <div class="usage-number-wrapper">
+            <p class="usage-number">4</p>
+          </div>
+          <p class="usage-step-title">Enable auto-sync</p>
+          <hr class="usage-divider" />
+          <p class="usage-step-description">
+            Activate automatic syncing, and your completed Codewars solutions
+            will be pushed to GitHub
+          </p>
+        </div>
+
+        <div class="usage-step">
+          <div class="usage-number-wrapper">
+            <p class="usage-number">5</p>
+          </div>
+          <p class="usage-step-title">Solve your first kata!</p>
+          <hr class="usage-divider" />
+          <p class="usage-step-description">
+            Just keep coding, and we’ll take care of the rest
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="usage-form">
+      <div class="form-wrapper">
+        <div class="form">
+          <div id="authenticate-request" class="form-auth-wrapper">
+            <p class="form-auth-title">Authenticate with GitHub:</p>
+            <button id="authenticate-btn" class="button form-button-github">
+              Authenticate
+            </button>
+          </div>
+          <div id="link-repo-request" class="form-repo-request">
+            <label for="repo-options">Choose an option:</label>
+            <select name="repo-options" id="repo-options" disabled>
+              <option value="new-repo">Create a new repository</option>
+              <option value="existing-repo">
+                Select an existing repository
+              </option>
+            </select>
+            <label for="repo-name">Repository name:</label>
+            <input
+              type="input"
+              id="repo-name"
+              placeholder="Type repository name"
+              disabled />
+            <button id="get-started-btn" class="button form-button-start">
+              Get Started!
+            </button>
+          </div>
+        </div>
+
+        <div id="repo-connected">
+          <p class="repo-connected-text">
+            Successfully linked
+            <a href="#" id="repo-url" class="repo-connected-text"></a> to
+            CodeHub!
+          </p>
+          <a href="" id="unlink-repo" class="repo-connected-text"
+            >Unlink repository</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section id="contact-section" class="contacts">
+      <h2 class="contacts-title">Contribute & Connect</h2>
+      <div class="contacts-wrapper">
+        <div class="contacts-download">
+          <p class="contacts-text">
+            Take your Codewars experience to the next level! Download the
+            extension now and automatically sync your solutions to GitHub – no
+            manual work needed. Just install, connect, and code!
+          </p>
+          <a
+            href="https://chromewebstore.google.com/detail/codehub/gadnnalppjchhdpplcjkhfabddchhlkp"
+            class="button download-button"
+            target="_blank"
+            >Download the Extension</a
+          >
+        </div>
+        <div class="contacts-star">
+          <p class="contacts-text">
+            Here's our repository! Feel free to give it a star if you find it
+            useful — your support helps us keep improving it!
+          </p>
+          <a
+            href="https://www.github.com/febinbellamy/CodeHub"
+            class="button star-button"
+            target="_blank"
+            id="star-repo-button"
+            >Star CodeHub on GitHub</a
+          >
+        </div>
+        <div class="contacts-bugs">
+          <p class="contacts-text">
+            If you want to get in touch, report a bug, or have any issues, here
+            are the icons below that will direct you to the right place!
+          </p>
+          <div class="contacts-icons">
+            <a
+              href="https://github.com/febinbellamy/CodeHub/labels/bug"
+              target="_blank"
+              ><img
+                src="./assets-2/bug-icon.svg"
+                alt="bug icon"
+                class="contacts-icon"
+            /></a>
+            <a
+              href="https://github.com/febinbellamy/CodeHub/labels/enhancement"
+              target="_blank"
+              ><img
+                src="./assets-2/issue-icon.svg"
+                alt="issue icon"
+                class="contacts-icon"
+            /></a>
+            <a
+              href="mailto:febinbellamy@gmail.com?subject=CodeHub"
+              target="_blank"
+              ><img
+                src="./assets-2/mail-icon.svg"
+                alt="email icon"
+                class="contacts-icon"
+            /></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <script src="scripts/welcome.js" type="module"></script>
   </body>
 </html>
