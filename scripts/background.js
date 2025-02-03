@@ -35,10 +35,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const redirectUrl = "https://github.com/";
     const scopes = "repo";
     const authUrl = `${authorizeUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scopes}`;
-    console.log("authorizeUrl:", authorizeUrl);
-    console.log("redirectUrl:", redirectUrl);
-    console.log("scopes:", scopes);
-    console.log("Final auth URL:", authUrl);
     const getGitHubAccessToken = async (githubCode) => {
       const url = `${accessTokenUrl}?client_id=${clientId}&client_secret=${clientSecret}&code=${githubCode}`;
       const options = {
