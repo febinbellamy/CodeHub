@@ -1,23 +1,5 @@
-// import { clientId, clientSecret } from "../credentials.js";
+import { clientId, clientSecret } from "../credentials.js";
 
-const clientId = "Ov23lijyEH5g08RG9bdh";
-const clientSecret = "c188abc9df109d3460b947e723771e64b60ccd28";
-
-console.log('ext id: ', chrome.runtime.id);
-console.log('Oauth app should use :', `chrome-extension://${chrome.runtime.id}/options.html`);
-
-console.log("Full URL:", chrome.runtime.getURL('options.html'));
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log("Received message:", request);
-  if (request.action === "authenticateUser") {
-    console.log("Starting authentication...");
-    console.log("Using client ID:", clientId);
-    // Log the full auth URL being used
-    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
-    console.log("Auth URL:", authUrl);
-  }
-});
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
