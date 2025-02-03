@@ -1,4 +1,23 @@
-import { clientId, clientSecret } from "../credentials.js";
+// import { clientId, clientSecret } from "../credentials.js";
+
+const clientId = "Ov23lijyEH5g08RG9bdh";
+const clientSecret = "c188abc9df109d3460b947e723771e64b60ccd28";
+
+console.log('ext id: ', chrome.runtime.id);
+console.log('Oauth app should use :', `chrome-extension://${chrome.runtime.id}/options.html`);
+
+console.log("Full URL:", chrome.runtime.getURL('options.html'));
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log("Received message:", request);
+  if (request.action === "authenticateUser") {
+    console.log("Starting authentication...");
+    console.log("Using client ID:", clientId);
+    // Log the full auth URL being used
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
+    console.log("Auth URL:", authUrl);
+  }
+});
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
@@ -34,6 +53,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const redirectUrl = "https://github.com/";
     const scopes = "repo";
     const authUrl = `${authorizeUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scopes}`;
+    console.log("authorizeUrl:", authorizeUrl);
+    console.log("redirectUrl:", redirectUrl);
+    console.log("scopes:", scopes);
+    console.log("Final auth URL:", authUrl);
     const getGitHubAccessToken = async (githubCode) => {
       const url = `${accessTokenUrl}?client_id=${clientId}&client_secret=${clientSecret}&code=${githubCode}`;
       const options = {
@@ -317,8 +340,46 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const encodedSolution = btoa(unescape(encodeURIComponent(userSolution)));
     const encodedReadMe = btoa(unescape(encodeURIComponent(description)));
 
+    const checkFileExists = async (baseUrl) => {
+      try {
+        const response = await fetch(baseUrl, {
+          method: 'GET',
+          headers: new Headers({
+            Accept: 'application/vnd.github+json',
+            Authorization: `Bearer ${accessToken}`
+          })
+        });
+        return response.ok;
+      } catch (error){
+        console.log(
+          "Error checking for pre-existing file!",
+          error.message
+        );
+      }
+    };
+
+    const getNextAvailableFilename = async (basePath, baseFileName, fileExtension) => {
+      let counter = 1;
+      let exists = await checkFileExists(`https://api.github.com/repos/${githubUsername}/${repo}/contents/${basePath}/${baseFileName}`);
+      
+      if (!exists){
+        return baseFileName;
+      }
+
+      while (exists){
+        const numbered = baseFileName.replace(fileExtension, `-${counter}${fileExtension}`);
+        exists = await checkFileExists(`https://api.github.com/repos/${githubUsername}/${repo}/contents/${basePath}/${numbered}`);
+        if (!exists){
+          return numbered;
+        }
+        counter++;
+      }
+    };
+
     const addSolution = async () => {
-      const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${rank}/${directoryName}/${fileName}`;
+      const basePath = `${rank}/${directoryName}`;
+      const newFileName = await getNextAvailableFilename(basePath, fileName, fileExtension);
+      const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${rank}/${directoryName}/${newFileName}`;
       const data = {
         message: "Add solution - CodeHub",
         content: encodedSolution,
