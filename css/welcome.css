@@ -38,7 +38,7 @@ main {
 #github-logo,
 #authenticate-btn,
 #star-repo-button,
-#footer-icons a {
+#footer-icons a svg {
   transition: all 0.2s ease;
 }
 
@@ -118,8 +118,9 @@ footer {
   color: white;
 }
 
-#footer-icons a:hover {
+#footer-icons a:hover svg {
   color: rgba(229, 44, 55, 255);
+  scale: 1.06;
 }
 
 #unlink-repo {
