@@ -16,6 +16,13 @@ h2 {
 }
 
 #authenticate-btn,
+#link-repo-btn,
+#star-repo-button,
+#footer-icons a svg {
+  transition: all 0.2s ease;
+}
+
+#authenticate-btn,
 #link-repo-btn {
   padding: 5px;
   background-color: black;
@@ -64,8 +71,9 @@ a {
   cursor: pointer;
 }
 
-#footer-icons a:hover {
+#footer-icons a:hover svg {
   color: rgba(229, 44, 55, 255);
+  scale: 1.03;
 }
 
 footer {
