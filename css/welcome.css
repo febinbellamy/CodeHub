@@ -34,6 +34,14 @@ main {
   padding: 12px;
 }
 
+#get-started-btn,
+#github-logo,
+#authenticate-btn,
+#star-repo-button,
+#footer-icons a {
+  transition: all 0.2s ease;
+}
+
 #get-started-btn {
   font-size: 25px;
   padding: 12px;
@@ -72,6 +80,14 @@ label {
 #authenticate-btn:hover {
   transform: scale(1, 1, 1, 1);
   opacity: 0.8;
+  background-color: white;
+  color: black;
+}
+
+#authenticate-btn:hover #github-logo {
+  filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%)
+    hue-rotate(346deg) brightness(104%) contrast(97%);
+  transition: none;
 }
 
 a {
