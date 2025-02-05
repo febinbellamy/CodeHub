@@ -15,7 +15,7 @@ async function updateManifest() {
       };
       manifest.browser_specific_settings = {
         gecko: {
-          id: "codehub@yourdomain.com",
+          id: "codehub-extension@yourdomain.com",
         },
       };
     } else {

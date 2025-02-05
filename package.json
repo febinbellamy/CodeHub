@@ -1,7 +1,7 @@
 {
   "name": "codehub",
   "version": "0.0.1",
-  "description": "A Chrome extension that automatically pushes your Codewars submissions to GitHub",
+  "description": "A browser extension that automatically pushes your Codewars submissions to GitHub",
   "main": "popup.js",
   "type": "module",
   "repository": {

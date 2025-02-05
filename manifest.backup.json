@@ -23,7 +23,13 @@
     "type": "module",
     "persistent": false
   },
-  "permissions": ["storage", "tabs", "scripting", "webNavigation", "activeTab"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting",
+    "webNavigation",
+    "activeTab"
+  ],
   "host_permissions": [
     "https://www.codewars.com/*",
     "https://github.com/*",
