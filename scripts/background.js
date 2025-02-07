@@ -327,65 +327,97 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
             Authorization: `Bearer ${accessToken}`
           })
         });
-        return response.ok;
+        
+        if (response.ok){
+          const fileData = await response.json();
+          return {
+            exists: true,
+            data: fileData
+          };
+        }
+        return {
+          exists: false,
+          data: null
+        };
       } catch (error){
         console.log(
           "Error checking for pre-existing file!",
           error.message
         );
       }
+      return {
+        exists: false,
+        data: null
+      };
     };
 
-    const getNextAvailableFilename = async (basePath, baseFileName, fileExtension) => {
-      let counter = 1;
-      let exists = await checkFileExists(`https://api.github.com/repos/${githubUsername}/${repo}/contents/${basePath}/${baseFileName}`);
-      
-      if (!exists){
-        return baseFileName;
-      }
-
-      while (exists){
-        const numbered = baseFileName.replace(fileExtension, `-${counter}${fileExtension}`);
-        exists = await checkFileExists(`https://api.github.com/repos/${githubUsername}/${repo}/contents/${basePath}/${numbered}`);
-        if (!exists){
-          return numbered;
-        }
-        counter++;
-      }
-    };
 
     const addSolution = async () => {
-      const basePath = `${rank}/${directoryName}`;
-      const newFileName = await getNextAvailableFilename(basePath, fileName, fileExtension);
-      const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${rank}/${directoryName}/${newFileName}`;
-      const data = {
-        message: "Add solution - CodeHub",
-        content: encodedSolution,
-      };
-      const options = {
-        method: "PUT",
-        headers: new Headers({
-          Accept: "application/vnd.github+json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        }),
-        body: JSON.stringify(data),
-      };
+      const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${rank}/${directoryName}/${fileName}`;
+      
+      const { exists, data: fileData } = await checkFileExists(url);
 
-      try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-          throw new Error(`Response status: ${response.status}`);
+      if (exists){
+        const data = {
+          message: "Update solution - CodeHub",
+          content: encodedSolution,
+          sha: fileData.sha
+        };
+
+        const options = {
+          method: "PUT",
+          headers: new Headers({
+            Accept: "application/vnd.github+json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          }),
+          body: JSON.stringify(data),
+        };
+
+        try {
+          const response = await fetch(url, options);
+          if (!response.ok){
+            throw new Error(`Response status: ${response.status}`);
+          }
+          console.log(`Success! The solution has been updated in the ${directoryName} directory.`)
+        } catch (error) {
+          console.log(
+            "Error pushing codewars solution to Github!",
+            error.message
+          );
         }
-        console.log(
-          `Success! The solution has been pushed to the ${directoryName} directory.`
-        );
-      } catch (error) {
-        console.log(
-          "Error pushing codewars solution to GitHub!",
-          error.message
-        );
+      }else {
+        const data = {
+          message: "Add solution - CodeHub",
+          content: encodedSolution,
+        };
+        const options = {
+          method: "PUT",
+          headers: new Headers({
+            Accept: "application/vnd.github+json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          }),
+          body: JSON.stringify(data),
+        };
+  
+        try {
+          const response = await fetch(url, options);
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
+          console.log(
+            `Success! The solution has been pushed to the ${directoryName} directory.`
+          );
+        } catch (error) {
+          console.log(
+            "Error pushing codewars solution to GitHub!",
+            error.message
+          );
+        }
+
       }
+      
     };
 
     const addReadme = async () => {
