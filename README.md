@@ -1,11 +1,14 @@
 <div align="center">
   <img src="https://github.com/user-attachments/assets/98efde8e-ed32-4711-be2e-48f10d89ba52" alt="CodeHub logo">
 </div>
-<h1 align="center">An open-source Chrome extension that automatically pushes your Codewars submissions to GitHub</h1>
+<h1 align="center">An open-source browser extension that automatically pushes your Codewars submissions to GitHub</h1>
 <br/>
 <div align="center">
   <a href="https://chromewebstore.google.com/detail/codehub/gadnnalppjchhdpplcjkhfabddchhlkp">
     <img src="https://github.com/user-attachments/assets/bb6c71c9-96c6-4186-98dc-2e21c18c676a" alt="Install extension in Chrome Web Store">
+  </a>
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/codehub-addon/">
+    <img src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg" alt="Install extension in Mozilla Add-ons Store" width="340" height="96">
   </a>
 </div>
 <br/> 
@@ -36,7 +39,7 @@
 ## How To Use / Demo
 
 ### 1. Install the Extension
-Download CodeHub from the Chrome Web Store [here](https://chromewebstore.google.com/detail/codehub/gadnnalppjchhdpplcjkhfabddchhlkp).
+Download CodeHub from the [Chrome Web Store](https://chromewebstore.google.com/detail/codehub/gadnnalppjchhdpplcjkhfabddchhlkp) or [Mozilla Add-ons](https://addons.mozilla.org/en-US/firefox/addon/codehub-addon/).
 ### 2. Authenticate with GitHub
 Click the CodeHub extension icon, then click the "Authenticate" button to connect your GitHub account.
 ### 3. Link a Repository
@@ -95,7 +98,7 @@ After manually pushing hundreds of my Codewars solutions to GitHub, I searched f
 A big thank you to Frances Coronel for her [README template](https://gist.github.com/FrancesCoronel/1bfc2d4aecb01a834b46) - it was a great starting point for structuring the README for this project. 
 
 ### Learning Resources
-The resources below helped me learn how to build a Chrome extension:
+The resources below helped me learn how to build a browser extension:
 * [freeCodeCamp | Build a Chrome Extension – Course for Beginners](https://www.youtube.com/watch?v=0n809nd4Zu4&t=3512s&ab_channel=freeCodeCamp.org)
 * [Gurulabs | Basics of Chrome Extension Playlist](https://www.youtube.com/playlist?list=PLBS1L3Ug2VVrTlexfI5i9OB0KpNfIjeeN)
 * [Tiff in Tech | CODE WITH ME: Build a Chrome Extension | How to Build & Publish a Chrome Extension in 10 Minutes](https://www.youtube.com/watch?v=B8Ihv3xsWYs&t=9s&ab_channel=TiffInTech) 
