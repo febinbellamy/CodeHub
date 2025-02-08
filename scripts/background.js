@@ -317,12 +317,54 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const encodedSolution = btoa(unescape(encodeURIComponent(userSolution)));
     const encodedReadMe = btoa(unescape(encodeURIComponent(description)));
 
-    const addSolution = async () => {
+    const checkFileExists = async (baseUrl) => {
+      try {
+        const response = await fetch(baseUrl, {
+          method: 'GET',
+          headers: new Headers({
+            Accept: 'application/vnd.github+json',
+            Authorization: `Bearer ${accessToken}`
+          })
+        });
+        
+        if (response.ok){
+          const fileData = await response.json();
+          return {
+            fileExists: true,
+            data: fileData
+          };
+        }
+        return {
+          fileExists: false,
+          data: null
+        };
+      } catch (error){
+        console.log(
+          "Error checking for pre-existing file!",
+          error.message
+        );
+      }
+      return {
+        fileExists: false,
+        data: null
+      };
+    };
+
+
+    const addOrUpdateSolution = async () => {
       const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${rank}/${directoryName}/${fileName}`;
+      
+      const { fileExists, data: fileData } = await checkFileExists(url);
+
       const data = {
-        message: "Add solution - CodeHub",
+        message: fileExists ? "Update solution - CodeHub" : "Add solution - CodeHub",
         content: encodedSolution,
       };
+
+      if (fileExists){
+        data.sha = fileData.sha;
+      }
+
       const options = {
         method: "PUT",
         headers: new Headers({
@@ -335,15 +377,13 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
       try {
         const response = await fetch(url, options);
-        if (!response.ok) {
+        if (!response.ok){
           throw new Error(`Response status: ${response.status}`);
         }
-        console.log(
-          `Success! The solution has been pushed to the ${directoryName} directory.`
-        );
+        console.log(`Success! The solution has been ${fileExists ? "updated" : "added"} in the ${directoryName} directory.`)
       } catch (error) {
         console.log(
-          "Error pushing codewars solution to GitHub!",
+          "Error pushing codewars solution to Github!",
           error.message
         );
       }
@@ -380,6 +420,6 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       }
     };
     await addReadme();
-    await addSolution();
+    await addOrUpdateSolution();
   }
 });
