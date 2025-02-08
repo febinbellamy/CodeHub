@@ -1,6 +1,5 @@
 import { clientId, clientSecret } from "../credentials.js";
 
-
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
     chrome.tabs.create({
@@ -331,12 +330,12 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         if (response.ok){
           const fileData = await response.json();
           return {
-            exists: true,
+            fileExists: true,
             data: fileData
           };
         }
         return {
-          exists: false,
+          fileExists: false,
           data: null
         };
       } catch (error){
@@ -346,78 +345,48 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         );
       }
       return {
-        exists: false,
+        fileExists: false,
         data: null
       };
     };
 
 
-    const addSolution = async () => {
+    const addOrUpdateSolution = async () => {
       const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${rank}/${directoryName}/${fileName}`;
       
-      const { exists, data: fileData } = await checkFileExists(url);
+      const { fileExists, data: fileData } = await checkFileExists(url);
 
-      if (exists){
-        const data = {
-          message: "Update solution - CodeHub",
-          content: encodedSolution,
-          sha: fileData.sha
-        };
+      const data = {
+        message: fileExists ? "Update solution - CodeHub" : "Add solution - CodeHub",
+        content: encodedSolution,
+      };
 
-        const options = {
-          method: "PUT",
-          headers: new Headers({
-            Accept: "application/vnd.github+json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          }),
-          body: JSON.stringify(data),
-        };
-
-        try {
-          const response = await fetch(url, options);
-          if (!response.ok){
-            throw new Error(`Response status: ${response.status}`);
-          }
-          console.log(`Success! The solution has been updated in the ${directoryName} directory.`)
-        } catch (error) {
-          console.log(
-            "Error pushing codewars solution to Github!",
-            error.message
-          );
-        }
-      }else {
-        const data = {
-          message: "Add solution - CodeHub",
-          content: encodedSolution,
-        };
-        const options = {
-          method: "PUT",
-          headers: new Headers({
-            Accept: "application/vnd.github+json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          }),
-          body: JSON.stringify(data),
-        };
-  
-        try {
-          const response = await fetch(url, options);
-          if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-          }
-          console.log(
-            `Success! The solution has been pushed to the ${directoryName} directory.`
-          );
-        } catch (error) {
-          console.log(
-            "Error pushing codewars solution to GitHub!",
-            error.message
-          );
-        }
-
+      if (fileExists){
+        data.sha = fileData.sha;
       }
-      
+
+      const options = {
+        method: "PUT",
+        headers: new Headers({
+          Accept: "application/vnd.github+json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        }),
+        body: JSON.stringify(data),
+      };
+
+      try {
+        const response = await fetch(url, options);
+        if (!response.ok){
+          throw new Error(`Response status: ${response.status}`);
+        }
+        console.log(`Success! The solution has been ${fileExists ? "updated" : "added"} in the ${directoryName} directory.`)
+      } catch (error) {
+        console.log(
+          "Error pushing codewars solution to Github!",
+          error.message
+        );
+      }
     };
 
     const addReadme = async () => {
@@ -451,6 +420,6 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       }
     };
     await addReadme();
-    await addSolution();
+    await addOrUpdateSolution();
   }
 });
