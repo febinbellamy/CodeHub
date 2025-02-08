@@ -35,6 +35,15 @@ getStartedButton.addEventListener("click", () => {
   }
 });
 
+document.addEventListener("keydown", (event) => {
+  if (
+    linkRepoRequestSection.style.display === "block" &&
+    event.key === "Enter"
+  ) {
+    getStartedButton.click();
+  }
+});
+
 const updateUI = () => {
   chrome.storage.local.get(
     ["isUserAuthenticated", "isRepoConnected", "githubUsername", "repo"],
