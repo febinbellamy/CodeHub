@@ -176,7 +176,7 @@ const createReadmeInNewRepo = async (repoName) => {
     }
     const json = await response.json();
   } catch (e) {
-    console.log("Error creating a ReadMe in the new repo:", e.message);
+    console.log("Error creating a README.md in the new repo:", e.message);
   }
 };
 
@@ -320,48 +320,46 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const checkFileExists = async (baseUrl) => {
       try {
         const response = await fetch(baseUrl, {
-          method: 'GET',
+          method: "GET",
           headers: new Headers({
-            Accept: 'application/vnd.github+json',
-            Authorization: `Bearer ${accessToken}`
-          })
+            Accept: "application/vnd.github+json",
+            Authorization: `Bearer ${accessToken}`,
+          }),
         });
-        
-        if (response.ok){
+
+        if (response.ok) {
           const fileData = await response.json();
           return {
             fileExists: true,
-            data: fileData
+            data: fileData,
           };
         }
         return {
           fileExists: false,
-          data: null
+          data: null,
         };
-      } catch (error){
-        console.log(
-          "Error checking for pre-existing file!",
-          error.message
-        );
+      } catch (error) {
+        console.log("Error checking for pre-existing file!", error.message);
       }
       return {
         fileExists: false,
-        data: null
+        data: null,
       };
     };
 
-
     const addOrUpdateSolution = async () => {
       const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${rank}/${directoryName}/${fileName}`;
-      
+
       const { fileExists, data: fileData } = await checkFileExists(url);
 
       const data = {
-        message: fileExists ? "Update solution - CodeHub" : "Add solution - CodeHub",
+        message: fileExists
+          ? "Update solution - CodeHub"
+          : "Add solution - CodeHub",
         content: encodedSolution,
       };
 
-      if (fileExists){
+      if (fileExists) {
         data.sha = fileData.sha;
       }
 
@@ -377,10 +375,14 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
       try {
         const response = await fetch(url, options);
-        if (!response.ok){
+        if (!response.ok) {
           throw new Error(`Response status: ${response.status}`);
         }
-        console.log(`Success! The solution has been ${fileExists ? "updated" : "added"} in the ${directoryName} directory.`)
+        console.log(
+          `Success! The solution has been ${
+            fileExists ? "updated" : "added"
+          } in the ${directoryName} directory.`
+        );
       } catch (error) {
         console.log(
           "Error pushing codewars solution to Github!",
@@ -391,6 +393,12 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
     const addReadme = async () => {
       const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${rank}/${directoryName}/README.md`;
+
+      const { fileExists } = await checkFileExists(url);
+      if (fileExists) {
+        console.log("The README.md for this solution already exists!");
+        return;
+      }
       const data = {
         message: "Add README.md - CodeHub",
         content: encodedReadMe,
@@ -410,11 +418,11 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
           throw new Error(`Response status: ${response.status}`);
         }
         console.log(
-          `Success! The README has been added to the ${directoryName} directory.`
+          `Success! The README.md has been added to the ${directoryName} directory.`
         );
       } catch (error) {
         console.log(
-          "Error pushing README for codewars solution to GitHub!",
+          "Error pushing README.md for codewars solution to GitHub!",
           error.message
         );
       }
