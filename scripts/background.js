@@ -114,7 +114,6 @@ const checkIfRepoExists = async (repoName) => {
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-
     for (let i = 0; i < json.length; i++) {
       let currentRepoName = json[i]["name"].toLowerCase();
       if (currentRepoName === repoName.toLowerCase()) return true;
@@ -122,6 +121,31 @@ const checkIfRepoExists = async (repoName) => {
     return false;
   } catch (e) {
     console.log("Error checking if repo exists:", e.message);
+  }
+};
+
+const checkIfRepoAndDirectoryExists = async (repoName, directory) => {
+  const { accessToken, githubUsername } = await chrome.storage.local.get([
+    "accessToken",
+    "githubUsername",
+  ]);
+  const url = `https://api.github.com/repos/${githubUsername}/${repoName}/contents/${directory}`;
+  const options = {
+    method: "GET",
+    headers: new Headers({
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${accessToken}`,
+    }),
+  };
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    return true;
+  } catch (e) {
+    console.log("Error checking if repo and directory exists:", e.message);
+    return false;
   }
 };
 
@@ -174,7 +198,6 @@ const createReadmeInNewRepo = async (repoName) => {
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-    const json = await response.json();
   } catch (e) {
     console.log("Error creating a README.md in the new repo:", e.message);
   }
@@ -183,16 +206,34 @@ const createReadmeInNewRepo = async (repoName) => {
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "connectExistingRepo") {
     const { repoName } = request;
+
     if (repoName.length > 0 && repoName.length <= 100) {
-      const repoFound = await checkIfRepoExists(repoName);
-      console.log("repoFound ->", repoFound);
+      let repoFound;
+      let directoryName = "";
+      let finalRepoName;
+      let indexOfForwardSlash = repoName.indexOf("/");
+      if (indexOfForwardSlash === -1) {
+        repoFound = await checkIfRepoExists(repoName);
+        finalRepoName = repoName;
+      } else {
+        directoryName = repoName.slice(indexOfForwardSlash + 1);
+        finalRepoName = repoName.slice(0, indexOfForwardSlash);
+        repoFound = await checkIfRepoAndDirectoryExists(
+          finalRepoName,
+          directoryName
+        );
+      }
       if (!repoFound) {
         chrome.runtime.sendMessage({
           action: "displayErrorMessage",
           issue: "repoNotFound",
         });
       } else if (repoFound) {
-        chrome.storage.local.set({ repo: repoName, isRepoConnected: true });
+        chrome.storage.local.set({
+          repo: finalRepoName,
+          directory: directoryName,
+          isRepoConnected: true,
+        });
         chrome.runtime.sendMessage({ action: "updateUI" });
       }
     } else {
@@ -243,8 +284,13 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "pushToGithub") {
-    const { githubUsername, repo, accessToken } =
-      await chrome.storage.local.get(["githubUsername", "repo", "accessToken"]);
+    const { githubUsername, repo, directory, accessToken } =
+      await chrome.storage.local.get([
+        "githubUsername",
+        "repo",
+        "directory",
+        "accessToken",
+      ]);
     const {
       directoryName,
       languageOfUserSolution,
@@ -348,7 +394,9 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     };
 
     const addOrUpdateSolution = async () => {
-      const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${rank}/${directoryName}/${fileName}`;
+      const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${
+        directory ? directory + "/" : ""
+      }${rank}/${directoryName}/${fileName}`;
 
       const { fileExists, data: fileData } = await checkFileExists(url);
 
@@ -392,7 +440,9 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     };
 
     const addReadme = async () => {
-      const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${rank}/${directoryName}/README.md`;
+      const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${
+        directory ? directory + "/" : ""
+      }${rank}/${directoryName}/README.md`;
 
       const { fileExists } = await checkFileExists(url);
       if (fileExists) {

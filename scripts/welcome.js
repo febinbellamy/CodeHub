@@ -21,10 +21,7 @@ starCodeHubButton.addEventListener("click", () => {
 
 getStartedButton.addEventListener("click", () => {
   const selectedOption = document.querySelector("#repo-options").value;
-  const repoName = document
-    .querySelector("#repo-name")
-    .value.trim()
-    .replaceAll(" ", "-");
+  const repoName = document.querySelector("#repo-name").value.trim();
   if (selectedOption === "existing-repo") {
     chrome.runtime.sendMessage({
       action: "connectExistingRepo",
@@ -46,10 +43,21 @@ document.addEventListener("keydown", (event) => {
 
 const updateUI = () => {
   chrome.storage.local.get(
-    ["isUserAuthenticated", "isRepoConnected", "githubUsername", "repo"],
+    [
+      "isUserAuthenticated",
+      "isRepoConnected",
+      "githubUsername",
+      "repo",
+      "directory",
+    ],
     (result) => {
-      const { isUserAuthenticated, isRepoConnected, githubUsername, repo } =
-        result;
+      const {
+        isUserAuthenticated,
+        isRepoConnected,
+        githubUsername,
+        repo,
+        directory,
+      } = result;
 
       if (!isUserAuthenticated && !isRepoConnected) {
         repoConnectedSection.style.display = "none";
@@ -63,8 +71,12 @@ const updateUI = () => {
         authRequestSection.style.display = "none";
         linkRepoRequestSection.style.display = "none";
         repoConnectedSection.style.display = "block";
-        aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}`;
-        aTagForRepoUrl.href = `https://github.com/${githubUsername}/${repo}`;
+        aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}${
+          directory ? "/" + directory : ""
+        }`;
+        aTagForRepoUrl.href = `https://github.com/${githubUsername}/${repo}${
+          directory ? "/tree/main/" + directory : ""
+        }`;
       }
     }
   );

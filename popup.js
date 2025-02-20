@@ -24,10 +24,21 @@ starCodeHubButton.addEventListener("click", () => {
 });
 
 chrome.storage.local.get(
-  ["isUserAuthenticated", "isRepoConnected", "githubUsername", "repo"],
+  [
+    "isUserAuthenticated",
+    "isRepoConnected",
+    "githubUsername",
+    "repo",
+    "directory",
+  ],
   (result) => {
-    const { isUserAuthenticated, isRepoConnected, githubUsername, repo } =
-      result;
+    const {
+      isUserAuthenticated,
+      isRepoConnected,
+      githubUsername,
+      repo,
+      directory,
+    } = result;
 
     if (!isUserAuthenticated && !isRepoConnected) {
       repoConnectedSection.style.display = "none";
@@ -41,8 +52,12 @@ chrome.storage.local.get(
       authRequestSection.style.display = "none";
       linkRepoRequestSection.style.display = "none";
       repoConnectedSection.style.display = "block";
-      aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}`;
-      aTagForRepoUrl.href = `https://github.com/${githubUsername}/${repo}`;
+      aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}${
+        directory ? "/" + directory : ""
+      }`;
+      aTagForRepoUrl.href = `https://github.com/${githubUsername}/${repo}/${
+        directory ? "tree/main/" + directory : ""
+      }`;
       aTagForRepoUrl.target = "_blank";
     }
   }

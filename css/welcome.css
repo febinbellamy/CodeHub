@@ -27,6 +27,9 @@ main {
 #repo-name {
   font-size: 25px;
   padding: 11px;
+  padding-right: 30px;
+  width: 100%;
+  position: relative;
 }
 
 #repo-options {
@@ -52,7 +55,7 @@ main {
 }
 
 #get-started-btn:hover {
-  transform: scale(1, 1, 1, 1);
+  transform: scale(1);
   background-color: rgb(95, 244, 95);
   opacity: 0.8;
 }
@@ -134,7 +137,6 @@ footer {
   padding: 1rem;
   margin: 1rem auto;
   max-width: 100%;
-  box-sizing: border-box;
   border: 1px solid white;
   border-radius: 8px;
   align-items: center;
@@ -146,6 +148,43 @@ footer {
   margin: 5px;
 }
 
+.input-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.tooltip-wrapper {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.tooltip-text {
+  display: none;
+  font-size: 12px;
+  position: absolute;
+  background-color: black;
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  top: -40px;
+  right: 50%;
+  transform: translateX(50%);
+  z-index: 1;
+}
+
+.tooltip-wrapper:hover .tooltip-text {
+  display: block;
+}
+
+.bi-info-circle {
+  color: grey;
+  margin-bottom: 5px;
+}
+
 @media (max-width: 1100px) {
   #link-repo-request {
     flex-direction: column;
@@ -154,5 +193,20 @@ footer {
 
   #link-repo-request > * {
     width: 100%;
+  }
+
+  #repo-name {
+    padding-right: 40px;
+    text-align: center;
+  }
+
+  .tooltip-wrapper {
+    right: 15px;
+  }
+
+  .tooltip-text {
+    left: auto;
+    right: 0;
+    transform: translateX(0);
   }
 }
