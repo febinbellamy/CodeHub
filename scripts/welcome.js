@@ -72,7 +72,7 @@ const updateUI = () => {
         linkRepoRequestSection.style.display = "none";
         repoConnectedSection.style.display = "block";
         aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}${
-          directory ? "/" + directory : ""
+          directory ? "/" + decodeURIComponent(directory) : ""
         }`;
         aTagForRepoUrl.href = `https://github.com/${githubUsername}/${repo}${
           directory ? "/tree/main/" + directory : ""
@@ -92,7 +92,7 @@ const displayErrorMessage = (msg) => {
     errorMessage = `Error: the ${repoName} repository already exists. Please choose the "Select an existing repository" option.`;
   } else if (msg.issue === "repoNameIsTooLongOrTooShort") {
     errorMessage = `Error: please enter a valid repository name that is between 1 and 100 characters long.`;
-  } else {
+  } else if (msg.issue === "invalidRepoName") {
     errorMessage = `Error: please enter a valid repository name.`;
   }
 

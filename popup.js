@@ -53,7 +53,7 @@ chrome.storage.local.get(
       linkRepoRequestSection.style.display = "none";
       repoConnectedSection.style.display = "block";
       aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}${
-        directory ? "/" + directory : ""
+        directory ? "/" + decodeURIComponent(directory) : ""
       }`;
       aTagForRepoUrl.href = `https://github.com/${githubUsername}/${repo}/${
         directory ? "tree/main/" + directory : ""

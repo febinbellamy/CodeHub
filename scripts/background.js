@@ -162,6 +162,7 @@ const createNewRepo = async (repoName) => {
     }),
     body: JSON.stringify(data),
   };
+
   try {
     const response = await fetch(url, options);
     if (!response.ok) {
@@ -170,17 +171,19 @@ const createNewRepo = async (repoName) => {
     const json = await response.json();
     return json["name"];
   } catch (e) {
-    console.log("Error creating a new repo:", e.message);
+    console.log("Error creating a new repo or repo/directory:", e.message);
   }
 };
 
-const createReadmeInNewRepo = async (repoName) => {
+const createReadmeInNewRepo = async (repoName, directory) => {
   const { accessToken, githubUsername } = await chrome.storage.local.get([
     "accessToken",
     "githubUsername",
   ]);
   const commitMessage = "Initial commit";
-  const url = `https://api.github.com/repos/${githubUsername}/${repoName}/contents/README.md`;
+  const url = `https://api.github.com/repos/${githubUsername}/${repoName}/contents${
+    directory ? "/" + directory : ""
+  }/README.md`;
   const repoDescriptionEncoded = btoa(
     "A collection of solutions to various Codewars problems! - Created using [CodeHub](https://github.com/FebinBellamy/CodeHub)"
   );
@@ -206,18 +209,28 @@ const createReadmeInNewRepo = async (repoName) => {
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "connectExistingRepo") {
     const { repoName } = request;
-
     if (repoName.length > 0 && repoName.length <= 100) {
       let repoFound;
       let directoryName = "";
       let finalRepoName;
       let indexOfForwardSlash = repoName.indexOf("/");
       if (indexOfForwardSlash === -1) {
-        repoFound = await checkIfRepoExists(repoName);
-        finalRepoName = repoName;
+        let sanitizedRepoName = repoName.replace(/[^a-zA-Z0-9\-\/]/g, "-");
+        repoFound = await checkIfRepoExists(sanitizedRepoName);
+        finalRepoName = sanitizedRepoName;
+      } else if (indexOfForwardSlash === 0) {
+        chrome.runtime.sendMessage({
+          action: "displayErrorMessage",
+          issue: "invalidRepoName",
+        });
+        return;
       } else {
-        directoryName = repoName.slice(indexOfForwardSlash + 1);
-        finalRepoName = repoName.slice(0, indexOfForwardSlash);
+        directoryName = encodeURIComponent(
+          repoName.slice(indexOfForwardSlash + 1)
+        );
+        finalRepoName = repoName
+          .slice(0, indexOfForwardSlash)
+          .replace(/[^a-zA-Z0-9\-\/]/g, "-");
         repoFound = await checkIfRepoAndDirectoryExists(
           finalRepoName,
           directoryName
@@ -228,6 +241,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
           action: "displayErrorMessage",
           issue: "repoNotFound",
         });
+        return;
       } else if (repoFound) {
         chrome.storage.local.set({
           repo: finalRepoName,
@@ -241,6 +255,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         action: "displayErrorMessage",
         issue: "repoNameIsTooLongOrTooShort",
       });
+      return;
     }
   }
 });
@@ -250,17 +265,59 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const { repoName } = request;
 
     if (repoName.length > 0 && repoName.length <= 100) {
-      const repoFound = await checkIfRepoExists(repoName);
+      let repoFound;
+      let directoryName = "";
+      let finalRepoName;
+      let indexOfForwardSlash = repoName.indexOf("/");
+
+      if (indexOfForwardSlash === -1) {
+        let sanitizedRepoName = repoName.replace(/[^a-zA-Z0-9\-\/]/g, "-");
+        repoFound = await checkIfRepoExists(sanitizedRepoName);
+        finalRepoName = sanitizedRepoName;
+      } else if (indexOfForwardSlash === 0) {
+        chrome.runtime.sendMessage({
+          action: "displayErrorMessage",
+          issue: "invalidRepoName",
+        });
+        return;
+      } else if (indexOfForwardSlash > 0) {
+        let decodedDirectoryName = repoName.slice(indexOfForwardSlash + 1);
+        if (decodedDirectoryName[0] === "/") {
+          chrome.runtime.sendMessage({
+            action: "displayErrorMessage",
+            issue: "invalidRepoName",
+          });
+          return;
+        }
+        finalRepoName = repoName
+          .slice(0, indexOfForwardSlash)
+          .replace(/[^a-zA-Z0-9\-\/]/g, "-");
+
+        directoryName = decodedDirectoryName.replace(
+          /[^a-zA-Z0-9\-\/]/g,
+          encodeURIComponent
+        );
+
+        repoFound = await checkIfRepoAndDirectoryExists(
+          finalRepoName,
+          directoryName
+        );
+      } else {
+        repoFound = await checkIfRepoExists(repoName);
+        finalRepoName = repoName;
+      }
       if (repoFound) {
         chrome.runtime.sendMessage({
           action: "displayErrorMessage",
           issue: "createAnAlreadyExisitingRepo",
         });
-      } else if (!repoFound) {
-        const finalRepoName = await createNewRepo(repoName);
-        await createReadmeInNewRepo(finalRepoName);
+        return;
+      } else {
+        await createNewRepo(finalRepoName);
+        await createReadmeInNewRepo(finalRepoName, directoryName);
         chrome.storage.local.set({
           repo: finalRepoName,
+          directory: directoryName,
           isRepoConnected: true,
         });
         chrome.runtime.sendMessage({ action: "updateUI" });
@@ -270,6 +327,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         action: "displayErrorMessage",
         issue: "repoNameIsTooLongOrTooShort",
       });
+      return;
     }
   }
 });
