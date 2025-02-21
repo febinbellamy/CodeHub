@@ -23,6 +23,10 @@ starCodeHubButton.addEventListener("click", () => {
   chrome.tabs.create({ url: "http://www.github.com/febinbellamy/codehub" });
 });
 
+const toggleVisibility = (section, visible) => {
+  section.style.display = visible ? "block" : "none";
+};
+
 chrome.storage.local.get(
   [
     "isUserAuthenticated",
@@ -41,17 +45,17 @@ chrome.storage.local.get(
     } = result;
 
     if (!isUserAuthenticated && !isRepoConnected) {
-      repoConnectedSection.style.display = "none";
-      linkRepoRequestSection.style.display = "none";
-      authRequestSection.style.display = "block";
+      toggleVisibility(linkRepoRequestSection, false);
+      toggleVisibility(repoConnectedSection, false);
+      toggleVisibility(authRequestSection, true);
     } else if (isUserAuthenticated && !isRepoConnected) {
-      authRequestSection.style.display = "none";
-      repoConnectedSection.style.display = "none";
-      linkRepoRequestSection.style.display = "block";
+      toggleVisibility(authRequestSection, false);
+      toggleVisibility(repoConnectedSection, false);
+      toggleVisibility(linkRepoRequestSection, true);
     } else if (isUserAuthenticated && isRepoConnected) {
-      authRequestSection.style.display = "none";
-      linkRepoRequestSection.style.display = "none";
-      repoConnectedSection.style.display = "block";
+      toggleVisibility(authRequestSection, false);
+      toggleVisibility(linkRepoRequestSection, false);
+      toggleVisibility(repoConnectedSection, true);
       aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}${
         directory ? "/" + decodeURIComponent(directory) : ""
       }`;

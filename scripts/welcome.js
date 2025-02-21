@@ -41,6 +41,11 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+const toggleVisibility = (section, visible) => {
+  section.style.display = visible ? "block" : "none";
+  section.style.visibility = visible ? "visible" : "hidden";
+};
+
 const updateUI = () => {
   chrome.storage.local.get(
     [
@@ -60,17 +65,17 @@ const updateUI = () => {
       } = result;
 
       if (!isUserAuthenticated && !isRepoConnected) {
-        repoConnectedSection.style.display = "none";
-        linkRepoRequestSection.style.display = "none";
-        authRequestSection.style.display = "block";
+        toggleVisibility(linkRepoRequestSection, false);
+        toggleVisibility(repoConnectedSection, false);
+        toggleVisibility(authRequestSection, true);
       } else if (isUserAuthenticated && !isRepoConnected) {
-        authRequestSection.style.display = "none";
-        repoConnectedSection.style.display = "none";
-        linkRepoRequestSection.style.display = "block";
+        toggleVisibility(authRequestSection, false);
+        toggleVisibility(repoConnectedSection, false);
+        toggleVisibility(linkRepoRequestSection, true);
       } else if (isUserAuthenticated && isRepoConnected) {
-        authRequestSection.style.display = "none";
-        linkRepoRequestSection.style.display = "none";
-        repoConnectedSection.style.display = "block";
+        toggleVisibility(authRequestSection, false);
+        toggleVisibility(linkRepoRequestSection, false);
+        toggleVisibility(repoConnectedSection, true);
         aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}${
           directory ? "/" + decodeURIComponent(directory) : ""
         }`;

@@ -1,3 +1,10 @@
+#authenticate-request,
+#link-repo-request,
+#repo-connected {
+  display: none;
+  visibility: hidden;
+}
+
 * {
   box-sizing: border-box;
 }
