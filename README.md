@@ -43,7 +43,8 @@ Download CodeHub from the [Chrome Web Store](https://chromewebstore.google.com/d
 ### 2. Authenticate with GitHub
 Click the CodeHub extension icon, then click the "Authenticate" button to connect your GitHub account.
 ### 3. Link a Repository
-Choose whether to connect CodeHub to an existing repository or create a new one. Enter the repository name and click "Get Started."
+Connect CodeHub to an existing repository or create a new one. You can also add an optional directory path within the repository (for example: "coding_challenges/codewars"). Click the "Get Started" button when you're ready.
+
 ### 4. Start Coding
 You're all set! Solve problems on Codewars, and your solutions will automatically sync to the linked GitHub repository after a successful submission.
 
