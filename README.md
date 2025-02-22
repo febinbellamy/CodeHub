@@ -4,34 +4,34 @@
 <h1 align="center">An open-source browser extension that automatically pushes your Codewars submissions to GitHub</h1>
 <br/>
 <div align="center">
-  <a href="https://chromewebstore.google.com/detail/codehub/gadnnalppjchhdpplcjkhfabddchhlkp" style="text-decoration: none;">
-    <img src="https://github.com/user-attachments/assets/bb6c71c9-96c6-4186-98dc-2e21c18c676a" alt="Install extension in Chrome Web Store">
+  <a href="https://chromewebstore.google.com/detail/codehub/gadnnalppjchhdpplcjkhfabddchhlkp">
+    <img src="https://github.com/user-attachments/assets/bb6c71c9-96c6-4186-98dc-2e21c18c676a" alt="Install extension in Chrome Web Store" style="text-decoration: none;">
   </a>
-  <a href="https://addons.mozilla.org/en-US/firefox/addon/codehub-addon/" style="text-decoration: none;">
-    <img src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg" alt="Install extension in Mozilla Add-ons Store" width="340" height="96">
-  </a>
-</div>
-<br/> 
-<div align="center">
-  <a href="https://github.com/febinbellamy/CodeHub/pulls" style="text-decoration: none;">
-    <img src="https://img.shields.io/github/issues-pr/febinbellamy/CodeHub?label=Pull%20Requests&style=flat-square" alt="Pull Requests">
-  </a>
-  <a href="https://github.com/febinbellamy/CodeHub/issues" style="text-decoration: none;">
-    <img src="https://img.shields.io/github/issues/febinbellamy/CodeHub?label=Issues&style=flat-square" alt="Issues">
-  </a>
-  <a href="https://github.com/febinbellamy/CodeHub/blob/main/LICENSE" style="text-decoration: none;">
-    <img src="https://img.shields.io/github/license/febinbellamy/CodeHub?label=License&style=flat-square" alt="MIT License">
-  </a>
-  <a href="https://twitter.com/intent/tweet?text=Check%20out%20CodeHub%20-%20a%20Chrome%20extension%20that%20automatically%20syncs%20your%20Codewars%20solutions%20to%20GitHub!%20https%3A%2F%2Fgithub.com%2FFebinBellamy%2FCodeHub%20%23codewars%20%23github%20%23coding%20%23chromeextension%20%23opensource%20%23devtools" style="text-decoration: none;">
-    <img src="https://img.shields.io/badge/Share%20on-X-1DA1F2?logo=x&style=flat-square" alt="Share on X">
-  </a>
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fgithub.com%2FFebinBellamy%2FCodeHub&source=CodeHub" style="text-decoration: none;">
-    <img src="https://img.shields.io/badge/Share%20on-LinkedIn-0A66C2?logo=linkedin&style=flat-square" alt="Share on LinkedIn">
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/codehub-addon/">
+    <img src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg" alt="Install extension in Mozilla Add-ons Store" width="340" height="96" style="text-decoration: none;">
   </a>
 </div>
 <br/> 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/6dd72b1d-88e7-4a50-b12d-874e0d5671db" alt="Example of extension interface"/>
+  <a href="https://github.com/febinbellamy/CodeHub/pulls">
+    <img src="https://img.shields.io/github/issues-pr/febinbellamy/CodeHub?label=Pull%20Requests&style=flat-square" alt="Pull Requests" style="text-decoration: none;">
+  </a>
+  <a href="https://github.com/febinbellamy/CodeHub/issues">
+    <img src="https://img.shields.io/github/issues/febinbellamy/CodeHub?label=Issues&style=flat-square" alt="Issues" style="text-decoration: none;">
+  </a>
+  <a href="https://github.com/febinbellamy/CodeHub/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/febinbellamy/CodeHub?label=License&style=flat-square" alt="MIT License" style="text-decoration: none;">
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Check%20out%20CodeHub%20-%20a%20Chrome%20extension%20that%20automatically%20syncs%20your%20Codewars%20solutions%20to%20GitHub!%20https%3A%2F%2Fgithub.com%2FFebinBellamy%2FCodeHub%20%23codewars%20%23github%20%23coding%20%23chromeextension%20%23opensource%20%23devtools">
+    <img src="https://img.shields.io/badge/Share%20on-X-1DA1F2?logo=x&style=flat-square" alt="Share on X" style="text-decoration: none;">
+  </a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fgithub.com%2FFebinBellamy%2FCodeHub&source=CodeHub">
+    <img src="https://img.shields.io/badge/Share%20on-LinkedIn-0A66C2?logo=linkedin&style=flat-square" alt="Share on LinkedIn" style="text-decoration: none;">
+  </a>
+</div>
+<br/> 
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/6dd72b1d-88e7-4a50-b12d-874e0d5671db" alt="Example of extension interface" style="text-decoration: none;"/>
 </div>
 
 <br/>
