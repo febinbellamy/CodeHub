@@ -69,7 +69,14 @@ CodeHub automates the process of committing and pushing your solutions to GitHub
 ## Developing Locally
 1. Fork this repo and clone it to your local machine.
 2. Install Node.js and npm [here](https://nodejs.org/en/download).
-3. `cd` into the root directory of the `CodeHub` folder, then run the following command to build the extension:
+3. Create a `credentials.js` file in the root directory of the project with the following content:
+   ```javascript
+   export const clientId = "YOUR_ID";
+   export const clientSecret = "YOUR_SECRET";
+   ```
+   - For more information on creating GitHub apps, visit the [official documentation](https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps).
+
+5. `cd` into the root directory of the `CodeHub` folder, then run the following command to build the extension:
     - For Chrome:
       ```bash
       node build.js
@@ -78,7 +85,7 @@ CodeHub automates the process of committing and pushing your solutions to GitHub
       ```bash
       node build.js --firefox
       ```
-4. Load the extension in developer mode. 
+6. Load the extension in developer mode. 
     - **For Chrome**:
       - Go to the extensions page (chrome://extensions)
       - Enable "Developer Mode" and click "Load unpacked"
@@ -89,7 +96,7 @@ CodeHub automates the process of committing and pushing your solutions to GitHub
       - Click on "This Firefox" and then "Load Temporary Add-on"
       - Select the `manifest.json` file from the root directory of the cloned `CodeHub` folder
 
-6. Enjoy!
+7. Enjoy!
 
 <br/>
 
