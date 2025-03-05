@@ -44,7 +44,6 @@ Download CodeHub from the [Chrome Web Store](https://chromewebstore.google.com/d
 Click the CodeHub extension icon, then click the "Authenticate" button to connect your GitHub account.
 ### 3. Link a Repository
 Connect CodeHub to an existing repository or create a new one. You can also add an optional directory path within the repository (for example: "coding_challenges/codewars"). Click the "Get Started" button when you're ready.
-
 ### 4. Start Coding
 You're all set! Solve problems on Codewars, and your solutions will automatically sync to the linked GitHub repository after a successful submission.
 
@@ -69,7 +68,14 @@ CodeHub automates the process of committing and pushing your solutions to GitHub
 ## Developing Locally
 1. Fork this repo and clone it to your local machine.
 2. Install Node.js and npm [here](https://nodejs.org/en/download).
-3. `cd` into the root directory of the `CodeHub` folder, then run the following command to build the extension:
+3. Create a `credentials.js` file in the root directory of the `CodeHub` folder with the following content:
+   ```javascript
+   export const clientId = "YOUR_ID";
+   export const clientSecret = "YOUR_SECRET";
+   ```
+   - For more information on creating GitHub apps, visit the [official documentation](https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps).
+
+4. In the root directory, run the following command:
     - For Chrome:
       ```bash
       node build.js
@@ -78,7 +84,7 @@ CodeHub automates the process of committing and pushing your solutions to GitHub
       ```bash
       node build.js --firefox
       ```
-4. Load the extension in developer mode. 
+5. Load the extension in developer mode. 
     - **For Chrome**:
       - Go to the extensions page (chrome://extensions)
       - Enable "Developer Mode" and click "Load unpacked"
