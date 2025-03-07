@@ -22,7 +22,7 @@
   <a href="https://github.com/febinbellamy/CodeHub/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/febinbellamy/CodeHub?label=License&style=flat-square" alt="MIT License" style="text-decoration: none;">
   </a>
-  <a href="https://twitter.com/intent/tweet?text=Check%20out%20CodeHub%20-%20a%20Chrome%20extension%20that%20automatically%20syncs%20your%20Codewars%20solutions%20to%20GitHub!%20https%3A%2F%2Fgithub.com%2FFebinBellamy%2FCodeHub%20%23codewars%20%23github%20%23coding%20%23chromeextension%20%23opensource%20%23devtools">
+  <a href="https://twitter.com/intent/tweet?text=Check%20out%20CodeHub%20-%20a%20browser%20extension%20that%20automatically%20syncs%20your%20Codewars%20solutions%20to%20GitHub!%20https%3A%2F%2Fgithub.com%2FFebinBellamy%2FCodeHub%20%23codewars%20%23github%20%23coding%20%23chromeextension%20%23opensource%20%23devtools">
     <img src="https://img.shields.io/badge/Share%20on-X-1DA1F2?logo=x&style=flat-square" alt="Share on X" style="text-decoration: none;">
   </a>
   <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fgithub.com%2FFebinBellamy%2FCodeHub&source=CodeHub">
@@ -102,7 +102,7 @@ CodeHub automates the process of committing and pushing your solutions to GitHub
 ## Support
 We appreciate your feedback and contributions! Here’s how you can help:
 - Star this repository
-- Leave us a review on the Chrome Web Store
+- Leave us a review on the [Chrome Web Store](https://chromewebstore.google.com/detail/codehub/gadnnalppjchhdpplcjkhfabddchhlkp/reviews) or [Firefox Add-Ons](https://addons.mozilla.org/en-US/firefox/addon/codehub-addon/)
 - Create a [bug report](https://github.com/febinbellamy/CodeHub/issues/new?assignees=febinbellamy&labels=bug&projects=&template=bug_report.md&title=)
 - Submit a [feature request](https://github.com/febinbellamy/CodeHub/issues/new?assignees=febinbellamy&labels=enhancement&projects=&template=feature_request.md&title=)
 
