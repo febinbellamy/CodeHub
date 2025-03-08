@@ -12,6 +12,7 @@ authButton.addEventListener("click", () => {
 });
 
 aTagforUnlinkRepo.addEventListener("click", () => {
+  console.log("Sending a message to unlink Repo!");
   chrome.runtime.sendMessage({ action: "unlinkRepo" });
 });
 
