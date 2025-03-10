@@ -12,7 +12,6 @@ authButton.addEventListener("click", () => {
 });
 
 aTagforUnlinkRepo.addEventListener("click", () => {
-  console.log("Sending a message to unlink Repo!");
   chrome.runtime.sendMessage({ action: "unlinkRepo" });
 });
 
@@ -22,14 +21,14 @@ starCodeHubButton.addEventListener("click", () => {
 
 getStartedButton.addEventListener("click", () => {
   const selectedOption = document.querySelector("#repo-options").value;
-  const repoName = document.querySelector("#repo-name").value.trim();
+  const userInput = document.querySelector("#user-input").value.trim();
   if (selectedOption === "existing-repo") {
     chrome.runtime.sendMessage({
       action: "connectExistingRepo",
-      repoName: repoName,
+      userInput: userInput,
     });
   } else if (selectedOption === "new-repo") {
-    chrome.runtime.sendMessage({ action: "createRepo", repoName: repoName });
+    chrome.runtime.sendMessage({ action: "createRepo", userInput: userInput });
   }
 });
 
@@ -91,11 +90,13 @@ const updateUI = () => {
 const displayErrorMessage = (msg) => {
   let errorMessage;
 
-  const repoName = document.querySelector("#repo-name").value;
+  const userInput = document.querySelector("#user-input").value;
   if (msg.issue === "repoNotFound") {
-    errorMessage = `Error: the ${repoName} repository was not found. Please enter a valid repository name.`;
+    errorMessage = `Error: the ${userInput} repository was not found. Please enter a valid repository name.`;
+  } else if (msg.issue === "repoAndDirectoryNotFound") {
+    errorMessage = `Error: the ${userInput} repo and directory path was not found. Please enter a valid input.`;
   } else if (msg.issue === "createAnAlreadyExisitingRepo") {
-    errorMessage = `Error: the ${repoName} repository already exists. Please choose the "Select an existing repository" option.`;
+    errorMessage = `Error: the ${userInput} repository already exists. Please choose the "Select an existing repository" option.`;
   } else if (msg.issue === "repoNameIsTooLongOrTooShort") {
     errorMessage = `Error: please enter a valid repository name that is between 1 and 100 characters long.`;
   } else if (msg.issue === "invalidRepoName") {

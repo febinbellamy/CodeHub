@@ -31,7 +31,7 @@ main {
   height: 250px;
 }
 
-#repo-name {
+#user-input {
   font-size: 25px;
   padding: 11px;
   padding-right: 30px;
@@ -202,7 +202,7 @@ footer {
     width: 100%;
   }
 
-  #repo-name {
+  #user-input {
     padding-right: 40px;
     text-align: center;
   }

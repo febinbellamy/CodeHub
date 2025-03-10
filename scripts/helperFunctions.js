@@ -62,4 +62,25 @@ const checkIfRepoAndDirectoryExists = async (repoName, directory) => {
   }
 };
 
-export { checkIfRepoExists, checkIfRepoAndDirectoryExists };
+const sanitizeRepoName = (name) => {
+  return name.replace(/[^a-zA-Z0-9\-\/]/g, "-");
+};
+
+const extractRepoNameAndDirectoryName = (input, idxOfForwardSlash) => {
+  let repoName = "";
+  let directoryName = "";
+
+  if (idxOfForwardSlash === -1) {
+    repoName = sanitizeRepoName(input);
+  } else {
+    repoName = sanitizeRepoName(input.slice(0, idxOfForwardSlash));
+    directoryName = encodeURIComponent(input.slice(idxOfForwardSlash + 1));
+  }
+  return { repoName, directoryName };
+};
+
+export {
+  checkIfRepoExists,
+  checkIfRepoAndDirectoryExists,
+  extractRepoNameAndDirectoryName,
+};
