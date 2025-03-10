@@ -4,6 +4,10 @@ import {
   addOrUpdateSolution,
   addReadme,
 } from "./codewarsToGithub.js";
+import {
+  createNewRepo,
+  createReadmeAndDirectory,
+} from "./createRepoAndReadme.js";
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
@@ -52,13 +56,17 @@ const checkIfRepoExists = async (repoName) => {
   try {
     const response = await fetch(url, options);
     if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
+      console.log(
+        `GitHub API error: ${response.status} - ${response.statusText}`
+      );
+      return false;
     }
     const json = await response.json();
     for (let i = 0; i < json.length; i++) {
       let currentRepoName = json[i]["name"].toLowerCase();
       if (currentRepoName === repoName.toLowerCase()) return true;
     }
+    console.log("Repo doesn't exist! Returning false");
     return false;
   } catch (e) {
     console.log("Error checking if repo exists:", e.message);
@@ -66,6 +74,7 @@ const checkIfRepoExists = async (repoName) => {
 };
 
 const checkIfRepoAndDirectoryExists = async (repoName, directory) => {
+  console.log("checking if repo and directory exists!!");
   const { accessToken, githubUsername } = await chrome.storage.local.get([
     "accessToken",
     "githubUsername",
@@ -80,70 +89,21 @@ const checkIfRepoAndDirectoryExists = async (repoName, directory) => {
   };
   try {
     const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
+    if (response.status === 404) {
+      console.log("Repo and directory path does not exist!");
+      return false;
     }
+    if (!response.ok) {
+      console.log(
+        `GitHub API error: ${response.status} - ${response.statusText}`
+      );
+      return false;
+    }
+    console.log("repoAndDirectory exists!");
     return true;
   } catch (e) {
-    console.log("Error checking if repo and directory exists:", e.message);
+    console.log("Error checking if repo and directory exists:", e);
     return false;
-  }
-};
-
-const createNewRepo = async (repoName) => {
-  const { accessToken } = await chrome.storage.local.get(["accessToken"]);
-  const url = `https://api.github.com/user/repos`;
-  const repoDescription = `A collection of solutions to various Codewars problems! - Created using [CodeHub](https://github.com/FebinBellamy/CodeHub)`;
-  const data = { name: repoName, description: repoDescription };
-  const options = {
-    method: "POST",
-    headers: new Headers({
-      Accept: "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    }),
-    body: JSON.stringify(data),
-  };
-
-  try {
-    const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-    const json = await response.json();
-    return json["name"];
-  } catch (e) {
-    console.log("Error creating a new repo or repo/directory:", e.message);
-  }
-};
-
-const createReadmeInNewRepo = async (repoName, directory) => {
-  const { accessToken, githubUsername } = await chrome.storage.local.get([
-    "accessToken",
-    "githubUsername",
-  ]);
-  const commitMessage = "Initial commit";
-  const url = `https://api.github.com/repos/${githubUsername}/${repoName}/contents${
-    directory ? "/" + directory : ""
-  }/README.md`;
-  const repoDescriptionEncoded = btoa(
-    "A collection of solutions to various Codewars problems! - Created using [CodeHub](https://github.com/FebinBellamy/CodeHub)"
-  );
-  const data = { message: commitMessage, content: repoDescriptionEncoded };
-  const options = {
-    method: "PUT",
-    headers: new Headers({
-      Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${accessToken}`,
-    }),
-    body: JSON.stringify(data),
-  };
-  try {
-    const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-  } catch (e) {
-    console.log("Error creating a README.md in the new repo:", e.message);
   }
 };
 
@@ -255,7 +215,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         return;
       } else {
         await createNewRepo(finalRepoName);
-        await createReadmeInNewRepo(finalRepoName, directoryName);
+        await createReadmeAndDirectory(finalRepoName, directoryName);
         chrome.storage.local.set({
           repo: finalRepoName,
           directory: directoryName,
@@ -275,7 +235,6 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
 chrome.runtime.onMessage.addListener(async (request) => {
   if (request.action === "unlinkRepo") {
-    console.log("unlinking repo!");
     await chrome.storage.local.remove(["repo"]);
     chrome.storage.local.set({ isRepoConnected: false });
     chrome.runtime.sendMessage({ action: "updateUI" });
