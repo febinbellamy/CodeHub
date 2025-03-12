@@ -1,3 +1,5 @@
+import { updateUI } from "./helperFunctions.js";
+
 const authButton = document.querySelector("#authenticate-btn");
 const authRequestSection = document.querySelector("#authenticate-request");
 const getStartedButton = document.querySelector("#get-started-btn");
@@ -41,52 +43,6 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-const toggleVisibility = (section, visible) => {
-  section.style.display = visible ? "block" : "none";
-  section.style.visibility = visible ? "visible" : "hidden";
-};
-
-const updateUI = () => {
-  chrome.storage.local.get(
-    [
-      "isUserAuthenticated",
-      "isRepoConnected",
-      "githubUsername",
-      "repo",
-      "directory",
-    ],
-    (result) => {
-      const {
-        isUserAuthenticated,
-        isRepoConnected,
-        githubUsername,
-        repo,
-        directory,
-      } = result;
-
-      if (!isUserAuthenticated && !isRepoConnected) {
-        toggleVisibility(linkRepoRequestSection, false);
-        toggleVisibility(repoConnectedSection, false);
-        toggleVisibility(authRequestSection, true);
-      } else if (isUserAuthenticated && !isRepoConnected) {
-        toggleVisibility(authRequestSection, false);
-        toggleVisibility(repoConnectedSection, false);
-        toggleVisibility(linkRepoRequestSection, true);
-      } else if (isUserAuthenticated && isRepoConnected) {
-        toggleVisibility(authRequestSection, false);
-        toggleVisibility(linkRepoRequestSection, false);
-        toggleVisibility(repoConnectedSection, true);
-        aTagForRepoUrl.innerHTML = `${githubUsername}/${repo}${
-          directory ? "/" + decodeURIComponent(directory) : ""
-        }`;
-        aTagForRepoUrl.href = `https://github.com/${githubUsername}/${repo}${
-          directory ? "/tree/main/" + directory : ""
-        }`;
-      }
-    }
-  );
-};
-
 const displayErrorMessage = (msg) => {
   let errorMessage;
 
@@ -117,10 +73,20 @@ const displayErrorMessage = (msg) => {
 
 chrome.runtime.onMessage.addListener((message) => {
   if (message.action === "updateUI") {
-    updateUI();
+    updateUI(
+      authRequestSection,
+      linkRepoRequestSection,
+      repoConnectedSection,
+      aTagForRepoUrl
+    );
   } else if (message.action === "displayErrorMessage") {
     displayErrorMessage(message);
   }
 });
 
-updateUI();
+updateUI(
+  authRequestSection,
+  linkRepoRequestSection,
+  repoConnectedSection,
+  aTagForRepoUrl
+);
