@@ -41,14 +41,12 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(({ url, tabId }) => {
   }
 });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "authenticateUser") {
     chrome.tabs.create({ url: authUrl, active: true });
     chrome.tabs.onUpdated.addListener(onTabUpdate);
   }
-});
 
-chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "connectExistingRepo") {
     const { userInput } = request;
     if (userInput.length === 0 || userInput.length > 100) {
@@ -99,9 +97,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     });
     chrome.runtime.sendMessage({ action: "updateUI" });
   }
-});
 
-chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "createRepo") {
     const { userInput } = request;
     if (userInput.length === 0 || userInput.length > 100) {
@@ -159,17 +155,13 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     });
     chrome.runtime.sendMessage({ action: "updateUI" });
   }
-});
 
-chrome.runtime.onMessage.addListener(async (request) => {
   if (request.action === "unlinkRepo") {
     await chrome.storage.local.remove(["repo"]);
     chrome.storage.local.set({ isRepoConnected: false });
     chrome.runtime.sendMessage({ action: "updateUI" });
   }
-});
 
-chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "pushToGithub") {
     const { githubUsername, repo, directory, accessToken } =
       await chrome.storage.local.get([
