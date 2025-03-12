@@ -21,7 +21,7 @@ starCodeHubButton.addEventListener("click", () => {
 
 getStartedButton.addEventListener("click", () => {
   const selectedOption = document.querySelector("#repo-options").value;
-  const userInput = document.querySelector("#user-input").value.trim();
+  const userInput = document.querySelector("#user-input").value;
   if (selectedOption === "existing-repo") {
     chrome.runtime.sendMessage({
       action: "connectExistingRepo",
@@ -96,11 +96,13 @@ const displayErrorMessage = (msg) => {
   } else if (msg.issue === "repoAndDirectoryNotFound") {
     errorMessage = `Error: the ${userInput} repo and directory path was not found. Please enter a valid input.`;
   } else if (msg.issue === "createAnAlreadyExisitingRepo") {
-    errorMessage = `Error: the ${userInput} repository already exists. Please choose the "Select an existing repository" option.`;
+    errorMessage = `Error: the ${userInput} repository already exists. \n Please choose the "Select an existing repository" option.`;
   } else if (msg.issue === "repoNameIsTooLongOrTooShort") {
     errorMessage = `Error: please enter a valid repository name that is between 1 and 100 characters long.`;
-  } else if (msg.issue === "invalidRepoName") {
-    errorMessage = `Error: please enter a valid repository name.`;
+  } else if (msg.issue === "invalidRepoOrDirectoryName") {
+    errorMessage = `Error: please enter a valid repository or directory name.`;
+  } else if (msg.issue === "repoAndDirectoryAlreadyExists") {
+    errorMessage = `Error: the ${userInput} repo and directory path already exists. \n Please choose the "Select an existing repository" option.`;
   }
 
   if (linkRepoRequestSection.children[0].tagName === "P") {

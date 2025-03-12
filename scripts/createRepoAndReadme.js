@@ -21,7 +21,6 @@ const createNewRepo = async (repoName) => {
       return false;
     }
     const json = await response.json();
-    console.log("json in createNewRepo():", json);
     return json["name"];
   } catch (e) {
     console.log("Error creating a new repo:", e);
@@ -41,7 +40,6 @@ const createReadmeAndDirectory = async (repoName, directory) => {
   const repoDescriptionEncoded = btoa(
     "A collection of solutions to various Codewars problems! - Created using [CodeHub](https://github.com/FebinBellamy/CodeHub)"
   );
-  console.log("creating readme in this path ->", url);
   const data = { message: commitMessage, content: repoDescriptionEncoded };
   const options = {
     method: "PUT",

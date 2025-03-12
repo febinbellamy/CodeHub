@@ -21,7 +21,6 @@ const checkIfRepoExists = async (repoName) => {
       let currentRepoName = json[i]["name"].toLowerCase();
       if (currentRepoName === repoName.toLowerCase()) return true;
     }
-    console.log("Repo doesn't exist! Returning false");
     return false;
   } catch (e) {
     console.log("Error checking if repo exists:", e.message);
@@ -29,7 +28,6 @@ const checkIfRepoExists = async (repoName) => {
 };
 
 const checkIfRepoAndDirectoryExists = async (repoName, directory) => {
-  console.log("checking if repo and directory exists!!");
   const { accessToken, githubUsername } = await chrome.storage.local.get([
     "accessToken",
     "githubUsername",
@@ -54,7 +52,6 @@ const checkIfRepoAndDirectoryExists = async (repoName, directory) => {
       );
       return false;
     }
-    console.log("repoAndDirectory exists!");
     return true;
   } catch (e) {
     console.log("Error checking if repo and directory exists:", e);

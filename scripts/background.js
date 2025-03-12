@@ -62,7 +62,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     if (indexOfForwardSlash === 0) {
       chrome.runtime.sendMessage({
         action: "displayErrorMessage",
-        issue: "invalidRepoName",
+        issue: "invalidRepoOrDirectoryName",
       });
       return;
     }
@@ -104,73 +104,60 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "createRepo") {
     const { userInput } = request;
-
-    if (userInput.length > 0 && userInput.length <= 100) {
-      let repoFound;
-      let directoryName = "";
-      let finalRepoName;
-      let indexOfForwardSlash = userInput.indexOf("/");
-
-      if (indexOfForwardSlash === -1) {
-        let sanitizedRepoName = userInput.replace(/[^a-zA-Z0-9\-\/]/g, "-");
-        repoFound = await checkIfRepoExists(sanitizedRepoName);
-        finalRepoName = sanitizedRepoName;
-      } else if (indexOfForwardSlash === 0) {
-        chrome.runtime.sendMessage({
-          action: "displayErrorMessage",
-          issue: "invalidRepoName",
-        });
-        return;
-      } else if (indexOfForwardSlash > 0) {
-        let decodedDirectoryName = repoName.slice(indexOfForwardSlash + 1);
-        if (decodedDirectoryName[0] === "/") {
-          chrome.runtime.sendMessage({
-            action: "displayErrorMessage",
-            issue: "invalidRepoName",
-          });
-          return;
-        }
-        finalRepoName = repoName
-          .slice(0, indexOfForwardSlash)
-          .replace(/[^a-zA-Z0-9\-\/]/g, "-");
-
-        directoryName = decodedDirectoryName.replace(
-          /[^a-zA-Z0-9\-\/]/g,
-          encodeURIComponent
-        );
-
-        repoFound = await checkIfRepoAndDirectoryExists(
-          finalRepoName,
-          directoryName
-        );
-      } else {
-        repoFound = await checkIfRepoExists(repoName);
-        finalRepoName = repoName;
-      }
-      if (repoFound) {
-        chrome.runtime.sendMessage({
-          action: "displayErrorMessage",
-          issue: "createAnAlreadyExisitingRepo",
-        });
-        return;
-      } else {
-        await createNewRepo(finalRepoName);
-
-        await createReadmeAndDirectory(finalRepoName, directoryName);
-        chrome.storage.local.set({
-          repo: finalRepoName,
-          directory: directoryName,
-          isRepoConnected: true,
-        });
-        chrome.runtime.sendMessage({ action: "updateUI" });
-      }
-    } else {
+    if (userInput.length === 0 || userInput.length > 100) {
       chrome.runtime.sendMessage({
         action: "displayErrorMessage",
         issue: "repoNameIsTooLongOrTooShort",
       });
       return;
     }
+    const indexOfForwardSlash = userInput.indexOf("/");
+    const indexOfDoubleForwardSlash = userInput.indexOf("//");
+    if (indexOfForwardSlash === 0 || indexOfDoubleForwardSlash >= 0) {
+      chrome.runtime.sendMessage({
+        action: "displayErrorMessage",
+        issue: "invalidRepoOrDirectoryName",
+      });
+      return;
+    }
+    const { repoName, directoryName } = extractRepoNameAndDirectoryName(
+      userInput,
+      indexOfForwardSlash
+    );
+    const repoFound = await checkIfRepoExists(repoName);
+    if (directoryName === "") {
+      if (repoFound) {
+        chrome.runtime.sendMessage({
+          action: "displayErrorMessage",
+          issue: "createAnAlreadyExisitingRepo",
+        });
+        return;
+      }
+      await createNewRepo(repoName);
+      await createReadmeAndDirectory(repoName, directoryName);
+    } else if (directoryName !== "") {
+      const repoAndDirectoryFound = await checkIfRepoAndDirectoryExists(
+        repoName,
+        directoryName
+      );
+      if (repoAndDirectoryFound) {
+        chrome.runtime.sendMessage({
+          action: "displayErrorMessage",
+          issue: "repoAndDirectoryAlreadyExists",
+        });
+        return;
+      }
+      if (!repoFound) {
+        await createNewRepo(repoName);
+      }
+      await createReadmeAndDirectory(repoName, directoryName);
+    }
+    chrome.storage.local.set({
+      repo: repoName,
+      directory: directoryName,
+      isRepoConnected: true,
+    });
+    chrome.runtime.sendMessage({ action: "updateUI" });
   }
 });
 
