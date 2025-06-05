@@ -2,7 +2,7 @@
   "name": "CodeHub",
   "description": "Automatically pushes your Codewars submissions to GitHub",
   "homepage_url": "https://github.com/FebinBellamy/CodeHub",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Febin Bellamy",
   "action": {
     "default_icon": {

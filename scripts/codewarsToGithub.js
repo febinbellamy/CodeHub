@@ -10,7 +10,7 @@ const supportedFileExtensions = {
   commonlisp: ".lisp",
   coq: ".v",
   crystal: ".cr",
-  csharp: ".cs",
+  "c#": ".cs",
   d: ".d",
   dart: ".dart",
   elixir: ".ex",
