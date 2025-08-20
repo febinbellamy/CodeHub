@@ -8,6 +8,9 @@ const repoConnectedSection = document.querySelector("#repo-connected");
 const aTagForRepoUrl = document.querySelector("#repo-url");
 const aTagforUnlinkRepo = document.querySelector("#unlink-repo");
 const starCodeHubButton = document.querySelector("#star-repo-button");
+const settingsIcon = document.querySelector("#settings-icon");
+const settingsModal = document.querySelector("#settings-modal");
+const closeModal = document.querySelector(".close");
 
 authButton.addEventListener("click", () => {
   chrome.runtime.sendMessage({ action: "authenticateUser" });
@@ -19,6 +22,20 @@ aTagforUnlinkRepo.addEventListener("click", () => {
 
 starCodeHubButton.addEventListener("click", () => {
   window.open("http://www.github.com/febinbellamy/codehub", "_blank").focus();
+});
+
+settingsIcon.addEventListener("click", () => {
+  settingsModal.style.display = "block";
+});
+
+closeModal.addEventListener("click", () => {
+  settingsModal.style.display = "none";
+});
+
+window.addEventListener("click", (event) => {
+  if (event.target === settingsModal) {
+    settingsModal.style.display = "none";
+  }
 });
 
 getStartedButton.addEventListener("click", () => {
