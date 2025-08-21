@@ -337,7 +337,7 @@ footer {
   text-align: right;
 }
 
-.save-btn {
+#save-settings-btn {
   background-color: rgb(76, 190, 228);
   color: white;
   border: none;
@@ -349,7 +349,7 @@ footer {
   font-weight: bold;
 }
 
-.save-btn:hover {
+#save-settings-btn:hover {
   background-color: rgb(56, 170, 208);
   transform: scale(1.05);
 }
