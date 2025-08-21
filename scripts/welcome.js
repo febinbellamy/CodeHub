@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 authButton.addEventListener("click", () => {
-  chrome.runtime.sendMessage({ action: "authtenticateUser" });
+  chrome.runtime.sendMessage({ action: "authenticateUser" });
 });
 
 aTagforUnlinkRepo.addEventListener("click", () => {
@@ -45,7 +45,6 @@ saveSettingsBtn.addEventListener("click", () => {
   const selected = document.querySelector(
     'input[name="folder-structure"]:checked'
   ).value;
-  console.log("Selected folder structure:", selected);
   chrome.storage.local.set({ folderStructure: selected }, () => {
     settingsModal.style.display = "none";
   });
