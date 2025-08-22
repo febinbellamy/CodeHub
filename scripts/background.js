@@ -22,6 +22,7 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
     chrome.storage.local.set({
       isUserAuthenticated: false,
       isRepoConnected: false,
+      folderStructure: "level-problem-language",
     });
   }
   chrome.runtime.setUninstallURL(
@@ -187,6 +188,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       directory,
       rank,
       directoryName,
+      languageOfUserSolution,
       encodedReadMe,
       accessToken
     );
@@ -197,6 +199,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       rank,
       directoryName,
       fileName,
+      languageOfUserSolution,
       encodedSolution,
       accessToken
     );

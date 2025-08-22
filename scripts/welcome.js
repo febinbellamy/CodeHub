@@ -8,6 +8,22 @@ const repoConnectedSection = document.querySelector("#repo-connected");
 const aTagForRepoUrl = document.querySelector("#repo-url");
 const aTagforUnlinkRepo = document.querySelector("#unlink-repo");
 const starCodeHubButton = document.querySelector("#star-repo-button");
+const settingsIcon = document.querySelector("#settings-icon");
+const settingsModal = document.querySelector("#settings-modal");
+const saveSettingsBtn = document.querySelector("#save-settings-btn");
+const closeModal = document.querySelector(".close");
+
+document.addEventListener("DOMContentLoaded", () => {
+  chrome.storage.local.get("folderStructure", (result) => {
+    const saved = result.folderStructure || "level-problem-language";
+    const radio = document.querySelector(
+      `input[name="folder-structure"][value="${saved}"]`
+    );
+    if (radio) {
+      radio.checked = true;
+    }
+  });
+});
 
 authButton.addEventListener("click", () => {
   chrome.runtime.sendMessage({ action: "authenticateUser" });
@@ -19,6 +35,29 @@ aTagforUnlinkRepo.addEventListener("click", () => {
 
 starCodeHubButton.addEventListener("click", () => {
   window.open("http://www.github.com/febinbellamy/codehub", "_blank").focus();
+});
+
+settingsIcon.addEventListener("click", () => {
+  settingsModal.style.display = "block";
+});
+
+saveSettingsBtn.addEventListener("click", () => {
+  const selected = document.querySelector(
+    'input[name="folder-structure"]:checked'
+  ).value;
+  chrome.storage.local.set({ folderStructure: selected }, () => {
+    settingsModal.style.display = "none";
+  });
+});
+
+closeModal.addEventListener("click", () => {
+  settingsModal.style.display = "none";
+});
+
+window.addEventListener("click", (event) => {
+  if (event.target === settingsModal) {
+    settingsModal.style.display = "none";
+  }
 });
 
 getStartedButton.addEventListener("click", () => {
