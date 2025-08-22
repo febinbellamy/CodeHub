@@ -45,7 +45,8 @@ Click the CodeHub extension icon, then click the "Authenticate" button to connec
 ### 3. Link a Repository
 Connect CodeHub to an existing repository or create a new one. You can also add an optional directory path within the repository (for example: "coding_challenges/codewars"). Click the "Get Started" button when you're ready.
 ### 4. Choose How Your Solutions Are Organized
-Click the settings ⚙️ icon to choose how CodeHub organizes your solutions in your GitHub repository ([demo](https://drive.google.com/file/d/1pYqAKIt1-FVHCpwMwm9kZLmhXYhU8mvw/view?usp=sharing)).
+Click the settings ⚙️ icon to choose how CodeHub organizes your solutions in your GitHub repository ([demo](https://drive.google.com/file/d/1y4hoQbh1ovLVR044YbIjyuTIJyXvT3tI/view?usp=sharing)).
+
 ### 5. Start Coding
 You're all set! Solve problems on Codewars, and your solutions will automatically sync to the linked GitHub repository after a successful submission.
 
