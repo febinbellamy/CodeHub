@@ -23,6 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
       radio.checked = true;
     }
   });
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("openSettings") === "true") {
+    settingsModal.style.display = "block";
+  }
 });
 
 authButton.addEventListener("click", () => {
@@ -41,22 +46,31 @@ settingsIcon.addEventListener("click", () => {
   settingsModal.style.display = "block";
 });
 
+const removeOpenSettingsParam = () => {
+  const url = new URL(window.location);
+  url.searchParams.delete("openSettings");
+  window.history.replaceState({}, document.title, url.pathname + url.search);
+};
+
 saveSettingsBtn.addEventListener("click", () => {
   const selected = document.querySelector(
     'input[name="folder-structure"]:checked'
   ).value;
   chrome.storage.local.set({ folderStructure: selected }, () => {
     settingsModal.style.display = "none";
+    removeOpenSettingsParam();
   });
 });
 
 closeModal.addEventListener("click", () => {
   settingsModal.style.display = "none";
+  removeOpenSettingsParam();
 });
 
 window.addEventListener("click", (event) => {
   if (event.target === settingsModal) {
     settingsModal.style.display = "none";
+    removeOpenSettingsParam();
   }
 });
 

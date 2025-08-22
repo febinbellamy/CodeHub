@@ -8,6 +8,7 @@ const repoConnectedSection = document.querySelector("#repo-connected");
 const aTagForRepoUrl = document.querySelector("#repo-url");
 const starCodeHubButton = document.querySelector("#star-repo-button");
 const globeIcon = document.querySelector("#globe-icon");
+const settingsIcon = document.querySelector("#settings-icon");
 
 authButton.addEventListener("click", () => {
   chrome.runtime.sendMessage({ action: "authenticateUser" });
@@ -23,6 +24,10 @@ globeIcon.addEventListener("click", () => {
 
 starCodeHubButton.addEventListener("click", () => {
   chrome.tabs.create({ url: "http://www.github.com/febinbellamy/codehub" });
+});
+
+settingsIcon.addEventListener("click", () => {
+  chrome.tabs.create({ url: "welcome.html?openSettings=true" });
 });
 
 updateUI(
