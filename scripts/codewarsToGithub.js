@@ -89,6 +89,42 @@ const checkFileExists = async (baseUrl, accessToken) => {
   };
 };
 
+const getUrl = (
+  githubUsername,
+  repo,
+  directory,
+  rank,
+  directoryName,
+  fileName,
+  languageOfUserSolution,
+  isReadmeFile,
+  folderStructure
+) => {
+  let url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${
+    directory ? directory + "/" : ""
+  }`;
+
+  if (folderStructure === "level-problem-language") {
+    return (
+      url + `${rank}/${directoryName}/${isReadmeFile ? "README.md" : fileName}`
+    );
+  } else if (folderStructure === "language-level-problem") {
+    return (
+      url +
+      `${languageOfUserSolution}/${rank}/${directoryName}/${
+        isReadmeFile ? "README.md" : fileName
+      }`
+    );
+  } else if (folderStructure === "level-language-problem") {
+    return (
+      url +
+      `${rank}/${languageOfUserSolution}/${directoryName}/${
+        isReadmeFile ? "README.md" : fileName
+      }`
+    );
+  }
+};
+
 const addOrUpdateSolution = async (
   githubUsername,
   repo,
@@ -96,12 +132,24 @@ const addOrUpdateSolution = async (
   rank,
   directoryName,
   fileName,
+  languageOfUserSolution,
   encodedSolution,
   accessToken
 ) => {
-  const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${
-    directory ? directory + "/" : ""
-  }${rank}/${directoryName}/${fileName}`;
+  const { folderStructure = "level-problem-language" } =
+    await chrome.storage.local.get("folderStructure");
+
+  const url = getUrl(
+    githubUsername,
+    repo,
+    directory,
+    rank,
+    directoryName,
+    fileName,
+    languageOfUserSolution,
+    false,
+    folderStructure
+  );
 
   const { fileExists, data: fileData } = await checkFileExists(
     url,
@@ -141,7 +189,7 @@ const addOrUpdateSolution = async (
     );
     return { success: true };
   } catch (error) {
-    console.log("Error pushing codewars solution to Github!");
+    console.log("Error pushing codewars solution to GitHub!");
     return { success: false, error: error.message };
   }
 };
@@ -152,12 +200,24 @@ const addReadme = async (
   directory,
   rank,
   directoryName,
+  languageOfUserSolution,
   encodedReadMe,
   accessToken
 ) => {
-  const url = `https://api.github.com/repos/${githubUsername}/${repo}/contents/${
-    directory ? directory + "/" : ""
-  }${rank}/${directoryName}/README.md`;
+  const { folderStructure = "level-problem-language" } =
+    await chrome.storage.local.get("folderStructure");
+
+  const url = getUrl(
+    githubUsername,
+    repo,
+    directory,
+    rank,
+    directoryName,
+    "README.md",
+    languageOfUserSolution,
+    true,
+    folderStructure
+  );
 
   const { fileExists } = await checkFileExists(url, accessToken);
   if (fileExists) {
