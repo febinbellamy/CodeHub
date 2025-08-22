@@ -44,10 +44,12 @@ Download CodeHub from the [Chrome Web Store](https://chromewebstore.google.com/d
 Click the CodeHub extension icon, then click the "Authenticate" button to connect your GitHub account.
 ### 3. Link a Repository
 Connect CodeHub to an existing repository or create a new one. You can also add an optional directory path within the repository (for example: "coding_challenges/codewars"). Click the "Get Started" button when you're ready.
-### 4. Start Coding
+### 4. Choose How Your Solutions Are Organized
+Click the settings ⚙️ icon to choose how CodeHub organizes your solutions in your GitHub repository ([demo](https://drive.google.com/file/d/1pYqAKIt1-FVHCpwMwm9kZLmhXYhU8mvw/view?usp=sharing)).
+### 5. Start Coding
 You're all set! Solve problems on Codewars, and your solutions will automatically sync to the linked GitHub repository after a successful submission.
 
-For a detailed walkthrough, check out the demo video below:
+For a detailed walkthrough, check out the video below:
 
 https://github.com/user-attachments/assets/e635a168-6c43-4132-8cb9-36bcc750076e
 
@@ -58,7 +60,7 @@ https://github.com/user-attachments/assets/e635a168-6c43-4132-8cb9-36bcc750076e
 Having a GitHub repository with your Codewars solutions highlights your dedication to learning and improving as a developer. It serves as a portfolio that recruiters and hiring managers can easily review to see your coding abilities and consistency in action.   
 
 ### Track Your Progress
-CodeHub organizes all of your Codewars solutions in your repository by difficulty level (6-kyu, 5-kyu, etc.). Each problem is stored in its own directory containing separate solution files for each language and a README for the problem description ([example](https://github.com/user-attachments/assets/28c23287-1689-4199-b6f5-9d440d7881f1)). This clear structure makes it easy to track your progress and see how much you've improved over time.  
+By default, CodeHub organizes all of your Codewars solutions in your repository by difficulty level (6-kyu, 5-kyu, etc.). Each problem is stored in its own directory containing separate solution files for each language and a README for the problem description ([example](https://github.com/user-attachments/assets/28c23287-1689-4199-b6f5-9d440d7881f1)). This clear structure makes it easy to track your progress and see how much you've improved over time.  
 
 ### Save Time
 CodeHub automates the process of committing and pushing your solutions to GitHub. Once set up, this extension will save you the time and hassle of manually copying, pasting, and uploading each solution to your repository.
