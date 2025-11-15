@@ -89,6 +89,27 @@ const checkFileExists = async (baseUrl, accessToken) => {
   };
 };
 
+const isContentIdentical = (existingContentBase64, newContentBase64) => {
+  try {
+    const existingContentBase64Clean = existingContentBase64.replace(/\s/g, "");
+    const existingContent = decodeURIComponent(
+      escape(atob(existingContentBase64Clean))
+    ).replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+    const newContent = decodeURIComponent(escape(atob(newContentBase64)))
+      .replace(/\r\n/g, "\n")
+      .replace(/\r/g, "\n");
+
+    const existingNormalized = existingContent.replace(/^\n+/, "").replace(/\n+$/, "");
+    const newNormalized = newContent.replace(/^\n+/, "").replace(/\n+$/, "");
+
+    return existingNormalized === newNormalized;
+  } catch (error) {
+    console.log("Error comparing file content:", error);
+    return false;
+  }
+};
+
 const getUrl = (
   githubUsername,
   repo,
@@ -164,6 +185,12 @@ const addOrUpdateSolution = async (
   };
 
   if (fileExists) {
+    if (isContentIdentical(fileData.content, encodedSolution)) {
+      console.log(
+        `There were no changes detected in your solution file! No update needed.`
+      );
+      return;
+    }
     data.sha = fileData.sha;
   }
 

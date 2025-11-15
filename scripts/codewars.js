@@ -36,19 +36,16 @@ chrome.storage.local.get(["isRepoConnected"], (result) => {
       const getUserSolution = () => {
         const userCodeBeforeParsing =
           document.querySelectorAll(".CodeMirror-lines")[0].innerText;
-        const userCodeArr = userCodeBeforeParsing.split("\n");
-        let parsedUserSolution = "";
-
-        for (let i = 0; i < userCodeArr.length; i++) {
-          let elem = userCodeArr[i];
-          if (/[^0-9]/.test(elem)) {
-            parsedUserSolution += elem;
-            if (i !== userCodeArr.length - 1) {
-              parsedUserSolution += "\n";
-            }
-          }
+        let userCodeArr = userCodeBeforeParsing.split("\n");
+        
+        const firstNonEmptyIndex = userCodeArr.findIndex(line => /[^0-9]/.test(line) && line.trim() !== "");
+        if (firstNonEmptyIndex > 0) {
+          userCodeArr = userCodeArr.slice(firstNonEmptyIndex);
         }
-        data["userSolution"] = parsedUserSolution;
+        
+        data["userSolution"] = userCodeArr
+          .filter(elem => /[^0-9]/.test(elem) && elem !== "")
+          .join("\n");
       };
 
       const interceptRedirection = () => {
@@ -78,10 +75,14 @@ chrome.storage.local.get(["isRepoConnected"], (result) => {
       document.addEventListener("keydown", (event) => {
         const isCmdOrCtrlKeyPressed = event.ctrlKey || event.metaKey;
         const isEnterKeyPressed = event.key === "Enter";
+        const attemptButton = document.querySelector("#attempt_btn");
+        const isSubmitButtonVisible = 
+          !submitButton.classList.contains("is-hidden") &&
+          attemptButton.style.display === "none";
         if (
           isCmdOrCtrlKeyPressed &&
           isEnterKeyPressed &&
-          !submitButton.classList.contains("is-hidden")
+          isSubmitButtonVisible
         ) {
           submitButton.click();
         }

@@ -2,7 +2,7 @@
   "name": "CodeHub",
   "description": "Automatically pushes your Codewars submissions to GitHub",
   "homepage_url": "https://github.com/FebinBellamy/CodeHub",
-  "version": "1.0.0",
+  "version": "2.0.2",
   "author": "Febin Bellamy",
   "action": {
     "default_icon": {
@@ -23,7 +23,13 @@
     "type": "module",
     "persistent": false
   },
-  "permissions": ["storage", "tabs", "scripting", "webNavigation", "activeTab"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting",
+    "webNavigation",
+    "activeTab"
+  ],
   "host_permissions": [
     "https://www.codewars.com/*",
     "https://github.com/*",
