@@ -1,6 +1,15 @@
+const getNextPageUrlFromLinkHeader = (linkHeader) => {
+  if (!linkHeader) return null;
+  const parts = linkHeader.split(",");
+  for (const part of parts) {
+    const match = part.trim().match(/<([^>]+)>;\s*rel="next"/);
+    if (match) return match[1];
+  }
+  return null;
+};
+
 const checkIfRepoExists = async (repoName) => {
   const { accessToken } = await chrome.storage.local.get(["accessToken"]);
-  const url = `https://api.github.com/user/repos`;
   const options = {
     method: "GET",
     headers: new Headers({
@@ -9,21 +18,25 @@ const checkIfRepoExists = async (repoName) => {
     }),
   };
   try {
-    const response = await fetch(url, options);
-    if (!response.ok) {
-      console.log(
-        `GitHub API error: ${response.status} - ${response.statusText}`
-      );
-      return false;
-    }
-    const json = await response.json();
-    for (let i = 0; i < json.length; i++) {
-      let currentRepoName = json[i]["name"].toLowerCase();
-      if (currentRepoName === repoName.toLowerCase()) return true;
+    let url = `https://api.github.com/user/repos?per_page=100&page=1`;
+    while (url) {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        console.log(
+          `GitHub API error: ${response.status} - ${response.statusText}`
+        );
+        return false;
+      }
+      const json = await response.json();
+      if (json.some((repo) => repo.name.toLowerCase() === repoName.toLowerCase())) {
+        return true;
+      }
+      url = getNextPageUrlFromLinkHeader(response.headers.get("Link"));
     }
     return false;
   } catch (e) {
     console.log("Error checking if repo exists:", e.message);
+    return false;
   }
 };
 
