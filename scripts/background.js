@@ -14,6 +14,86 @@ import {
   extractRepoNameAndDirectoryName,
 } from "./helperFunctions.js";
 
+const languageCommentDelimiters = {
+  agda: { line: "--" },
+  bf: { line: null },
+  c: { line: "//" },
+  cfml: { blockStart: "<!---", blockEnd: "--->" },
+  cpp: { line: "//" },
+  cobol: { line: "*" },
+  coffeescript: { line: "#" },
+  clojure: { line: ";;" },
+  commonlisp: { line: ";;" },
+  coq: { blockStart: "(*", blockEnd: "*)" },
+  crystal: { line: "#" },
+  "c#": { line: "//" },
+  d: { line: "//" },
+  dart: { line: "//" },
+  elixir: { line: "#" },
+  elm: { line: "--" },
+  erlang: { line: "%" },
+  factor: { line: "!" },
+  forth: { line: "\\" },
+  fortran: { line: "!" },
+  fsharp: { line: "//" },
+  go: { line: "//" },
+  groovy: { line: "//" },
+  haskell: { line: "--" },
+  haxe: { line: "//" },
+  idris: { line: "--" },
+  java: { line: "//" },
+  javascript: { line: "//" },
+  julia: { line: "#" },
+  kotlin: { line: "//" },
+  lambdacalc: { line: null },
+  lean: { line: "--" },
+  lua: { line: "--" },
+  nasm: { line: ";" },
+  nim: { line: "#" },
+  objc: { line: "//" },
+  ocaml: { blockStart: "(*", blockEnd: "*)" },
+  pascal: { blockStart: "{", blockEnd: "}" },
+  perl: { line: "#" },
+  php: { line: "//" },
+  powershell: { line: "#" },
+  prolog: { line: "%" },
+  purescript: { line: "--" },
+  python: { line: "#" },
+  r: { line: "#" },
+  reason: { blockStart: "/*", blockEnd: "*/" },
+  racket: { line: ";" },
+  raku: { line: "#" },
+  riscv: { line: "#" },
+  ruby: { line: "#" },
+  rust: { line: "//" },
+  scala: { line: "//" },
+  solidity: { line: "//" },
+  shell: { line: "#" },
+  sql: { line: "--" },
+  swift: { line: "//" },
+  typescript: { line: "//" },
+  vb: { line: "'" },
+};
+
+const makeCommentHeader = (language, kataUrl, solutionUrl) => {
+  const delimiters = languageCommentDelimiters[language] || { line: "#" };
+  const lines = [`Kata: ${kataUrl}`, `My solution: ${solutionUrl}`];
+  if (delimiters.line) {
+    return `${lines.map((line) => `${delimiters.line} ${line}`).join("\n")}\n\n`;
+  }
+  if (delimiters.blockStart && delimiters.blockEnd) {
+    return `${delimiters.blockStart}\n${lines.join("\n")}\n${delimiters.blockEnd}\n\n`;
+  }
+  return "";
+};
+
+const getSolutionPath = (folderStructure, rank, language, directoryName, fileName) => {
+  if (folderStructure === "language-problem") return `${language}/${directoryName}/${fileName}`;
+  if (folderStructure === "language-level-problem") return `${language}/${rank}/${directoryName}/${fileName}`;
+  if (folderStructure === "level-language-problem") return `${rank}/${language}/${directoryName}/${fileName}`;
+  return `${rank}/${directoryName}/${fileName}`;
+};
+
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
     chrome.tabs.create({
@@ -23,6 +103,7 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
       isUserAuthenticated: false,
       isRepoConnected: false,
       folderStructure: "level-problem-language",
+      addReadmeFile: true,
     });
   }
   chrome.runtime.setUninstallURL(
@@ -48,7 +129,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     chrome.tabs.onUpdated.addListener(onTabUpdate);
   }
 
-  if (request.action === "connectExistingRepo") {
+    if (request.action === "connectExistingRepo") {
     const { userInput } = request;
     if (userInput.length === 0 || userInput.length > 100) {
       chrome.runtime.sendMessage({
@@ -178,21 +259,43 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       description,
       rank,
     } = request.codewarsData;
-    const { folderStructure = "level-problem-language" } = await chrome.storage.local.get("folderStructure");
+    const { folderStructure = "level-problem-language", addReadmeFile = true } = await chrome.storage.local.get(["folderStructure", "addReadmeFile"]);
     const fileExtension = supportedFileExtensions[languageOfUserSolution];
-    const fileName = folderStructure === "language-problem" ? `mysolution${fileExtension}` : directoryName + fileExtension;
-    const encodedSolution = btoa(unescape(encodeURIComponent(userSolution)));
-    const encodedReadMe = btoa(unescape(encodeURIComponent(description)));
-    await addReadme(
-      githubUsername,
-      repo,
-      directory,
+    const fileName =
+      folderStructure === "language-problem"
+        ? `mysolution${fileExtension}`
+        : directoryName + fileExtension;
+    const solutionPath = getSolutionPath(
+      folderStructure,
       rank,
-      directoryName,
       languageOfUserSolution,
-      encodedReadMe,
-      accessToken
+      directoryName,
+      fileName
     );
+    const solutionUrl = `https://github.com/${githubUsername}/${repo}/blob/main/${
+      directory ? `${directory}/` : ""
+    }${solutionPath}`;
+    const commentHeader = makeCommentHeader(
+      languageOfUserSolution,
+      request.codewarsData.kataUrl,
+      solutionUrl
+    );
+    const encodedSolution = btoa(
+      unescape(encodeURIComponent(`${commentHeader}${userSolution}`))
+    );
+    const encodedReadMe = btoa(unescape(encodeURIComponent(description)));
+    if (addReadmeFile) {
+      await addReadme(
+        githubUsername,
+        repo,
+        directory,
+        rank,
+        directoryName,
+        languageOfUserSolution,
+        encodedReadMe,
+        accessToken
+      );
+    }
     await addOrUpdateSolution(
       githubUsername,
       repo,

@@ -28,6 +28,7 @@ chrome.storage.local.get(["isRepoConnected"], (result) => {
           data["name"] = nameOfChallenge;
           data["description"] = `${descriptionHeader}${parsedDescription}`;
           data["directoryName"] = json["slug"];
+          data["kataUrl"] = url;
         } catch (e) {
           console.log("Error! Unable to get description and rank: ", e);
         }

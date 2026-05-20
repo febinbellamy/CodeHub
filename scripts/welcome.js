@@ -12,9 +12,10 @@ const settingsIcon = document.querySelector("#settings-icon");
 const settingsModal = document.querySelector("#settings-modal");
 const saveSettingsBtn = document.querySelector("#save-settings-btn");
 const closeModal = document.querySelector(".close");
+const addReadmeFileCheckbox = document.querySelector("#add-readme-file");
 
 document.addEventListener("DOMContentLoaded", () => {
-  chrome.storage.local.get("folderStructure", (result) => {
+   chrome.storage.local.get(["folderStructure", "addReadmeFile"], (result) => {
     const saved = result.folderStructure || "level-problem-language";
     const radio = document.querySelector(
       `input[name="folder-structure"][value="${saved}"]`
@@ -22,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (radio) {
       radio.checked = true;
     }
+    addReadmeFileCheckbox.checked = result.addReadmeFile !== false;
   });
 
   const params = new URLSearchParams(window.location.search);
@@ -56,7 +58,7 @@ saveSettingsBtn.addEventListener("click", () => {
   const selected = document.querySelector(
     'input[name="folder-structure"]:checked'
   ).value;
-  chrome.storage.local.set({ folderStructure: selected }, () => {
+  chrome.storage.local.set({ folderStructure: selected, addReadmeFile: addReadmeFileCheckbox.checked }, () => {
     settingsModal.style.display = "none";
     removeOpenSettingsParam();
   });
