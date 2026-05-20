@@ -178,8 +178,9 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       description,
       rank,
     } = request.codewarsData;
+    const { folderStructure = "level-problem-language" } = await chrome.storage.local.get("folderStructure");
     const fileExtension = supportedFileExtensions[languageOfUserSolution];
-    const fileName = directoryName + fileExtension;
+    const fileName = folderStructure === "language-problem" ? `mysolution${fileExtension}` : directoryName + fileExtension;
     const encodedSolution = btoa(unescape(encodeURIComponent(userSolution)));
     const encodedReadMe = btoa(unescape(encodeURIComponent(description)));
     await addReadme(

@@ -125,11 +125,14 @@ const getUrl = (
     directory ? directory + "/" : ""
   }`;
 
-  if (folderStructure === "level-problem-language") {
+  if (folderStructure === "language-problem") {
     return (
-      url + `${rank}/${directoryName}/${isReadmeFile ? "README.md" : fileName}`
+      url +
+      `${languageOfUserSolution}/${directoryName}/${
+        isReadmeFile ? "README.md" : fileName
+      }`
     );
-  } else if (folderStructure === "language-level-problem") {
+  } else if (folderStructure === "level-problem-language") {
     return (
       url +
       `${languageOfUserSolution}/${rank}/${directoryName}/${
