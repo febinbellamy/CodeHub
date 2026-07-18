@@ -76,14 +76,14 @@ const sanitizeRepoName = (name) => {
   return name.replace(/[^a-zA-Z0-9\-\/]/g, "-");
 };
 
-const extractRepoNameAndDirectoryName = (input, idxOfForwardSlash) => {
+const extractRepoNameAndDirectoryName = (input, idxOfForwardSlash, sanitize = true) => {
   let repoName = "";
   let directoryName = "";
 
   if (idxOfForwardSlash === -1) {
-    repoName = sanitizeRepoName(input);
+    repoName = sanitize ? sanitizeRepoName(input) : input.trim();
   } else {
-    repoName = sanitizeRepoName(input.slice(0, idxOfForwardSlash));
+    repoName = sanitize ? sanitizeRepoName(input.slice(0, idxOfForwardSlash)) : input.slice(0, idxOfForwardSlash).trim();
     directoryName = encodeURIComponent(input.slice(idxOfForwardSlash + 1));
   }
   return { repoName, directoryName };
