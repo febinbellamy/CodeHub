@@ -193,6 +193,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       encodedReadMe,
       accessToken
     );
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     await addOrUpdateSolution(
       githubUsername,
       repo,
