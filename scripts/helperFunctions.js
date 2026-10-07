@@ -9,7 +9,7 @@ const getNextPageUrlFromLinkHeader = (linkHeader) => {
 };
 
 const checkIfRepoExists = async (repoName) => {
-  const { accessToken } = await chrome.storage.local.get(["accessToken"]);
+  const { accessToken } = await chrome.storage.session.get(["accessToken"]);
   const options = {
     method: "GET",
     headers: new Headers({
@@ -41,8 +41,8 @@ const checkIfRepoExists = async (repoName) => {
 };
 
 const checkIfRepoAndDirectoryExists = async (repoName, directory) => {
-  const { accessToken, githubUsername } = await chrome.storage.local.get([
-    "accessToken",
+  const { accessToken } = await chrome.storage.session.get(["accessToken"]);
+  const { githubUsername } = await chrome.storage.local.get([
     "githubUsername",
   ]);
   const url = `https://api.github.com/repos/${githubUsername}/${repoName}/contents/${directory}`;

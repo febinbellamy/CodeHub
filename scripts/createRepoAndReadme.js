@@ -1,5 +1,5 @@
 const createNewRepo = async (repoName) => {
-  const { accessToken } = await chrome.storage.local.get(["accessToken"]);
+  const { accessToken } = await chrome.storage.session.get(["accessToken"]);
   const url = `https://api.github.com/user/repos`;
   const repoDescription = `A collection of solutions to various Codewars problems! - Created using [CodeHub](https://github.com/FebinBellamy/CodeHub)`;
   const data = { name: repoName, description: repoDescription };
@@ -29,8 +29,8 @@ const createNewRepo = async (repoName) => {
 };
 
 const createReadmeAndDirectory = async (repoName, directory) => {
-  const { accessToken, githubUsername } = await chrome.storage.local.get([
-    "accessToken",
+  const { accessToken } = await chrome.storage.session.get(["accessToken"]);
+  const { githubUsername } = await chrome.storage.local.get([
     "githubUsername",
   ]);
   const commitMessage = "Initial commit";

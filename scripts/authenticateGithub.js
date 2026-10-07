@@ -21,7 +21,9 @@ const getGitHubAccessToken = async (githubCode) => {
     }
     const json = await response.json();
     if (json["access_token"]) {
-      chrome.storage.local.set({ accessToken: json["access_token"] });
+      // Use session storage (memory-only, cleared when the browser closes)
+      // instead of local storage so the OAuth token is never written to disk.
+      chrome.storage.session.set({ accessToken: json["access_token"] });
     }
   } catch (error) {
     console.log("Error! Unable to get access token", error.message);
@@ -29,7 +31,7 @@ const getGitHubAccessToken = async (githubCode) => {
 };
 
 const getGithubUsername = async () => {
-  chrome.storage.local.get(["accessToken"], async (result) => {
+  chrome.storage.session.get(["accessToken"], async (result) => {
     const accessToken = result.accessToken;
     const url = `https://api.github.com/user`;
     const options = {

@@ -165,13 +165,9 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   }
 
   if (request.action === "pushToGithub") {
-    const { githubUsername, repo, directory, accessToken } =
-      await chrome.storage.local.get([
-        "githubUsername",
-        "repo",
-        "directory",
-        "accessToken",
-      ]);
+    const { githubUsername, repo, directory } =
+      await chrome.storage.local.get(["githubUsername", "repo", "directory"]);
+    const { accessToken } = await chrome.storage.session.get(["accessToken"]);
     const {
       directoryName,
       languageOfUserSolution,
